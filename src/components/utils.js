@@ -3,7 +3,7 @@ const MAX_RADIUS = 15;
 const DEPTH = 2;
 const LEFT_COLOR = "ffffff";
 const RIGHT_COLOR = "ff0000";
-const NUM_POINTS = 3500;
+const NUM_POINTS = 0;
 
 //eb3324 vermelho fatec
 //3d4f5d azul fatec

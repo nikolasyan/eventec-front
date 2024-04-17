@@ -141,7 +141,7 @@ const AllEvents = () => {
       <div className='container'>
         <div className="row">
           <div className="col-3">
-            <h4>Filtrar</h4>
+            <h4>Eventos próximos a mim</h4>
             <p class="text-danger">Para maior precisão, prefira uma rede móvel, e não utilize VPNs.</p>
             <button type='submit' className='btn btn-primary' onClick={handleFilterNearby}>Próximos a mim</button>
 
@@ -155,7 +155,8 @@ const AllEvents = () => {
                 eventCategory={event.category}
                 eventAddress={event.address}
                 eventDate={event.dateEvent}
-                distance={event.distanceFromUser} 
+                distance={event.distanceFromUser}
+                cargaHora={event.cargaHoraria} 
                 onSubscribe={() => handleSubscribeToEvent(event.id)} 
               />
             ))}

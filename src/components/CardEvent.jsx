@@ -1,15 +1,19 @@
 import React from 'react'
 
-const CardEvent = ({ eventTitle, eventDescription, eventCategory, eventAddress, eventDate, distance, onSubscribe}) => {
+const CardEvent = ({ eventTitle, eventDescription, eventCategory, cargaHora,eventAddress, eventDate, distance, onSubscribe}) => {
 
   return (
     <div className="card text-start" style={{ width: "100%" }}>
       <div className="card-body cardEvent">
         <h4 className="card-title">{eventTitle}</h4>
-        <p className="card-text">{eventDescription}</p>
+        <strong className="card-text">{eventDescription}</strong>
         <div className="d-flex">
-          <p>Categoria: </p>
+          <strong>Categoria: </strong>
           <span>{eventCategory}</span>
+        </div>
+        <div className="d-flex">
+          <strong>Carga horária:</strong>
+          <span> {cargaHora} horas</span>
         </div>
 
         <span>Localização: </span>

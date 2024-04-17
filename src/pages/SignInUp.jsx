@@ -140,7 +140,7 @@ const SignInUp = () => {
               checked={userType === 'usuarioComum'}
               onChange={handleUserTypeChange}
             />
-            <label className="btn btn-outline-primary" htmlFor="usuarioComum">Usuário Comum</label>
+            <label className="btn btn-outline-primary" htmlFor="usuarioComum">Comunidade Externa</label>
 
             <input
               className="btn-check"

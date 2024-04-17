@@ -19,3 +19,13 @@
     border-radius: 5px;
     margin-bottom: 15px;
 }
+
+.card.text-start{
+    strong {
+        margin-right: 3px;
+    }
+}
+
+.card-title {
+    font-weight: 600;
+}

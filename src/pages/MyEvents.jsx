@@ -52,7 +52,6 @@ const MyEvents = () => {
                                 {subscription.title}
                             </div>
                             <div className="card-body">
-                                <h5 className="card-title">{subscription.title}</h5>
                                 <p className="card-text">Categoria: {subscription.event.category}</p>
                                 <p className='card-text'>Localização: {subscription.address}</p>
                                 <span>Data do evento:  </span>

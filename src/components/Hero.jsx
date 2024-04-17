@@ -23,7 +23,7 @@ const Hero = () => {
         <WordChanger/>
       </div>
       <div className="shadowContainer">
-        <a href="/signinup" class="shadow">Cadastre-se</a>
+        <a href="/signinup" class="shadow">Acessar</a>
       </div>
     </div>
   );

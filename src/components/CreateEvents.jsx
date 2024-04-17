@@ -4,6 +4,7 @@ import axios from 'axios';
 const CreateEvents = () => {
 
   const [title, setTitle] = useState('');
+  const [cargaHoraria, setCargaHoraria] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [address, setAddress] = useState('');
@@ -46,6 +47,7 @@ const CreateEvents = () => {
         addressLat,
         addressLng,
         dateEvent,
+        cargaHoraria,
         user: {
           email: userEmail,
           password: userPassword
@@ -94,14 +96,10 @@ const CreateEvents = () => {
         </div>
 
         <div className="form-group">
-          <div class="form-floating">
-            <select class="form-select" id="floatingSelect" aria-label="Você está criando um evento ou curso?">
-              <option value="" disabled selected>Escolha uma opção</option>
-              <option value="" disabled>Curso (em breve!)</option>
-              <option value="evento">Evento</option>
-            </select>
-            <label for="floatingSelect">Você está criando um evento ou curso?</label>
-          </div>
+
+        <div className="form-group">
+          <input type="number" className="form-control" id="title" placeholder="Digite a carga horária" value={cargaHoraria} onChange={(e) => setCargaHoraria(e.target.value)} />
+        </div>
         </div>
 
         <div className="form-group">
