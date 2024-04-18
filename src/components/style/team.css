@@ -1,34 +1,3 @@
-.cardImage{
-    > img {
-        height: 100px;
-    }
-}
-
-.membersCard {
-    display: flex;
-    margin-top: 50px;
-    justify-content: center;
-    gap: 110px;
-    flex-wrap: wrap;
-}
-
-.cardImage {
-    margin-bottom: 25px;
-}
-
-.cardName{
-    font-weight: 700;
-}
-
-.TeamContainer {
-    margin: 10%;
-    margin-top: 50px;
-    margin-bottom: 80px;
-}
-
-.cardContent {
-    border: 1px solid black;
-    padding: 48px;
-    width: 200px;
-    border-radius: 10px;
+.img-fluid.teamImg{
+    max-width: 40%;
 }

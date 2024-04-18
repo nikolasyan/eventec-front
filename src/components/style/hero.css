@@ -1,24 +1,16 @@
 .eventecHero {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    
     color: #ffffff;
     font-weight: 500;
     font-size: 1.5rem;
     pointer-events: none;
 }
-.shadowContainer {
-    position: absolute;
-    top: 70%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
+
 .eventecAndWords{
     pointer-events: none;
     >h1 {
         font-size: 60px;
-        color: white;
+        color: rgb(255, 255, 255);
         font-weight: 600;
         text-shadow: 2px 2px 10px #eb3324;    
     }
@@ -26,7 +18,7 @@
     >h2 {
         font-size: 90px;
         text-shadow: 2px 2px 100px #000000;    
-        color: #ffffff;
+        color: #000000;
     }
 }
 
@@ -36,7 +28,7 @@
         pointer-events: none;
         >h1 {
             font-size: 40px;
-            color: white;
+            color: rgb(255, 255, 255);
             font-weight: 600;
             text-shadow: 2px 2px 10px #eb3324;    
         }
@@ -44,7 +36,7 @@
         >h2 {
             font-size: 60px;
             text-shadow: 2px 2px 100px #000000;    
-            color: #ffffff;
+            color: #000000;
         }
     }
 }
