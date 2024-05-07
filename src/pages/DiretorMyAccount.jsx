@@ -67,7 +67,7 @@ const DiretorMyAccount = () => {
             </div>
         </div>
     );
-
+    if (localStorage.userType === "professor" || localStorage.userType === "diretor") {
     return (
         <><LoggedNavbar/>
         <div className="container-bg">
@@ -92,6 +92,11 @@ const DiretorMyAccount = () => {
             <Footer />
         </>
     );
+} else {
+    return (
+      <h1 className='align-middle'>ACESSO NEGADO</h1>
+    )
+  }
 }
 
 export default DiretorMyAccount;
