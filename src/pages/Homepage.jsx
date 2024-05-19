@@ -1,8 +1,7 @@
-import { useEffect, useRef } from 'react';
 import AboutUs from '../components/AboutUs';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
-import HomeNavbar from '../components/HomeNavbar';
+import { useEffect, useRef } from 'react';
 import Team from '../components/Team';
 import TechGrid from '../components/TechGrid';
 import "../components/style/home.css";
@@ -29,7 +28,6 @@ function Homepage() {
 
   return (
     <div className="App">
-      {/* <HomeNavbar/> */}
       <Hero/>
       <InfoGrid/>
       <AboutUs/>

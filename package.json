@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@ap.cx/react-fullpage": "^0.3.0",
-    "@fullpage/react-fullpage": "^0.1.40",
     "@react-three/drei": "^9.84.3",
     "@react-three/fiber": "^8.15.11",
     "@testing-library/jest-dom": "^5.17.0",

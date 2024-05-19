@@ -1,99 +1,75 @@
-import React from 'react'
-import "./style/global.css"
-import threejs from '../assets/images/threejs.png';
+import React from 'react';
+import './style/global.css';
 import git from '../assets/images/git.png';
-import htmlcssjs from '../assets/images/htmlcssjs.jpg';
-import java from '../assets/images/java.png';
-import mysql from '../assets/images/mysql.jpg';
-import react from '../assets/images/react.jpg';
-import springboot from '../assets/images/springboot.png';
-import bootstrap from '../assets/images/bootstrap.png'
+import framermotion from '../assets/images/framermotion.jpg';
+import java from '../assets/images/java-icon.svg';
+import mysql from '../assets/images/mysql.png';
+import reactLogo from '../assets/images/react-logo.svg';
+import springboot from '../assets/images/springboot.jpg';
+import bootstrap from '../assets/images/bootstrap.jpeg';
+import heroku from '../assets/images/heroku-logo.png';
 
 const TechGrid = () => {
     return (
-		<div className="container">
-		<div class="row" data-masonry='{"percentPosition": true }'>
-		<div class="col-sm-6 col-lg-4 mb-4">
-		  <div class="card">
-			<svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>
-			<div class="card-body">
-			  <h5 class="card-title">Card title that wraps to a new line</h5>
-			  <p class="card-text">This is a longer card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-			</div>
-		  </div>
-		</div>
-		<div class="col-sm-6 col-lg-4 mb-4">
-		  <div class="card p-3">
-			<figure class="p-3 mb-0">
-			  <blockquote class="blockquote">
-				<p>A well-known quote, contained in a blockquote element.</p>
-			  </blockquote>
-			  <figcaption class="blockquote-footer mb-0 text-body-secondary">
-				Someone famous in <cite title="Source Title">Source Title</cite>
-			  </figcaption>
-			</figure>
-		  </div>
-		</div>
-		<div class="col-sm-6 col-lg-4 mb-4">
-		  <div class="card">
-			<svg class="bd-placeholder-img card-img-top" width="100%" height="200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Image cap" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Image cap</text></svg>
-			<div class="card-body">
-			  <h5 class="card-title">Card title</h5>
-			  <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-			  <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-			</div>
-		  </div>
-		</div>
-		<div class="col-sm-6 col-lg-4 mb-4">
-		  <div class="card text-bg-primary text-center p-3">
-			<figure class="mb-0">
-			  <blockquote class="blockquote">
-				<p>A well-known quote, contained in a blockquote element.</p>
-			  </blockquote>
-			  <figcaption class="blockquote-footer mb-0 text-white">
-				Someone famous in <cite title="Source Title">Source Title</cite>
-			  </figcaption>
-			</figure>
-		  </div>
-		</div>
-		<div class="col-sm-6 col-lg-4 mb-4">
-		  <div class="card text-center">
-			<div class="card-body">
-			  <h5 class="card-title">Card title</h5>
-			  <p class="card-text">This card has a regular title and short paragraph of text below it.</p>
-			  <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-			</div>
-		  </div>
-		</div>
-		<div class="col-sm-6 col-lg-4 mb-4">
-		  <div class="card">
-			<svg class="bd-placeholder-img card-img" width="100%" height="260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Card image" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"/><text x="50%" y="50%" fill="#dee2e6" dy=".3em">Card image</text></svg>
-		  </div>
-		</div>
-		<div class="col-sm-6 col-lg-4 mb-4">
-		  <div class="card p-3 text-end">
-			<figure class="mb-0">
-			  <blockquote class="blockquote">
-				<p>A well-known quote, contained in a blockquote element.</p>
-			  </blockquote>
-			  <figcaption class="blockquote-footer mb-0 text-body-secondary">
-				Someone famous in <cite title="Source Title">Source Title</cite>
-			  </figcaption>
-			</figure>
-		  </div>
-		</div>
-		<div class="col-sm-6 col-lg-4 mb-4">
-		  <div class="card">
-			<div class="card-body">
-			  <h5 class="card-title">Card title</h5>
-			  <p class="card-text">This is another card with title and supporting text below. This card has some additional content to make it slightly taller overall.</p>
-			  <p class="card-text"><small class="text-body-secondary">Last updated 3 mins ago</small></p>
-			</div>
-		  </div>
-		</div>
-	  </div>
-	  </div>
-    )
-}
+        <div className="container">
+            <div className="row" data-masonry='{"percentPosition": true }'>
+                <div className="col-sm-6 col-lg-4 mb-4">
+                    <div className="card">
+                        <img src={reactLogo} className="card-img-top" alt="React Logo" />
+                        <div className="card-body">
+                            <h5 className="card-title">React</h5>
+                            <p className="card-text">Uma biblioteca JavaScript para construir interfaces de usuário, usada no front-end.</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-sm-6 col-lg-4 mb-4">
+                    <div className="card">
+                        <figure className="mb-0">
+                                <img src={framermotion} alt="" className='w-100'/>
+                        </figure>
+                    </div>
+                </div>
+                <div className="col-sm-6 col-lg-4 mb-4">
+                    <div className="card">
+                        <img src={java} className="p-5 card-img-top w-50 align-self-center" alt="Java Logo" />
+                        <div className="card-body">
+                            <h5 className="card-title">Java</h5>
+                            <p className="card-text">Uma linguagem de programação de alto nível, baseada em classes e orientada a objetos. usada no back-end</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-sm-6 col-lg-4 mb-4">
+                    <div className="card text-bg-primary text-center p-0">
+							<img src={bootstrap} alt=""  className='w-100'/>
+                    </div>
+                </div>
+                <div className="col-sm-6 col-lg-4 mb-4">
+                    <div className="card text-center">
+                        <div className="card-body">
+							<img src={git} alt="" className='w-50'/>
+						</div>
+                    </div>
+                </div>
+                <div className="col-sm-6 col-lg-4 mb-4">
+                    <div className="card">
+					<img src={mysql} className="card-img-top" alt="Java Logo" />
+                    </div>
+                </div>
+                <div className="col-sm-6 col-lg-4 mb-4">
+                    <div className="card p-0 text-end">
+					<img src={springboot} alt="" className='w-100'/>
+                    </div>
+                </div>
+                <div className="col-sm-6 col-lg-4 mb-4">
+                    <div className="card">
+                        <div className="card-body p-0">
+							<img src={heroku} alt="" className='w-100'/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
 
-export default TechGrid
+export default TechGrid;

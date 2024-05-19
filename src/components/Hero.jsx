@@ -1,37 +1,96 @@
-import React, { useRef } from "react";
+import React, { useState } from "react";
+import { motion } from "framer-motion";
 
 const Hero = () => {
-	return (
-		<div className="px-lg-5">
-			<div class="px-5 my-5">
-				<div class="row p-4 pb-0 pe-lg-0 pt-lg-5 align-items-center rounded-3 border shadow-lg">
-					<div class="col-lg-7 p-3 p-lg-5 pt-lg-3">
-						<div class="lc-block mb-3">
-							<div editable="rich">
-								<h2 class="text-lg-start fw-bold display-4">Eventec&nbsp;<p></p>
-									<p></p>
-								</h2>
-							</div>
-						</div>
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.3,
+      },
+    },
+  };
 
-						<div class="lc-block mb-3">
-							<div editable="rich">
-								<p class="text-lg-start lead">Quickly design and customize responsive mobile-first sites with Bootstrap, the world’s most popular front-end open source toolkit, featuring Sass variables and mixins, responsive grid system, extensive prebuilt components, and powerful JavaScript plugins.
-								</p>
-							</div>
-						</div>
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+      },
+    },
+  };
 
-						<div class="lc-block d-grid gap-2 d-md-flex justify-content-md-start"><a class="btn btn-primary px-4 me-md-2" href="/signinup" role="button">Entrar</a>
-							<a class="btn btn-outline-secondary px-4" href="/signinup" role="button">Cadastrar-se</a>
-						</div>
-					</div>
-					<div class="col-lg-4 offset-lg-1 p-0 overflow-hidden shadow-lg">
-						<div class="lc-block"><img class="rounded-start w-100" src="https://images.unsplash.com/photo-1493612276216-ee3925520721?crop=entropy&amp;cs=tinysrgb&amp;fit=max&amp;fm=jpg&amp;ixid=MnwzNzg0fDB8MXxzZWFyY2h8M3x8d2Vic2l0ZXxlbnwwfDF8fHwxNjIxNDQ4NTEw&amp;ixlib=rb-1.2.1&amp;q=80&amp;w=1080" alt="Photo by Diego PH" width="720" />
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+  const wordAnimation = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.4,
+      },
+    }),
+  };
+
+  const text = "Descubra eventos gratuitos dedicados às Fatecs. Junte-se agora para explorar eventos acadêmicos e extracurriculares.";
+
+  const words = text.split(" ");
+
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  const handleMouseMove = (e) => {
+    setMousePosition({ x: e.clientX, y: e.clientY });
+  };
+
+  return (
+    <motion.section
+      className="bsb-hero-1 px-3 bsb-overlay bsb-hover-pull hero"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      onMouseMove={handleMouseMove}
+    >
+      <motion.div
+        className="background-animation"
+        style={{
+          background: `radial-gradient(circle at ${mousePosition.x}px ${mousePosition.y}px, #000000, #dc3545)`,
+        }}
+      />
+      <div className="container">
+        <div className="row justify-content-md-center">
+          <div className="col-12 col-md-11 col-lg-9 col-xl-7 col-xxl-6 text-center text-white">
+            <motion.h2 className="display-3 fw-bold mb-3" variants={itemVariants}>
+              Eventec
+            </motion.h2>
+            <motion.p className="lead mb-5">
+              {words.map((word, index) => (
+                <motion.span
+                  key={index}
+                  variants={wordAnimation}
+                  initial="hidden"
+                  animate="visible"
+                  custom={index}
+                >
+                  {word}{" "}
+                </motion.span>
+              ))}
+            </motion.p>
+            <motion.div className="d-grid gap-2 d-sm-flex justify-content-sm-center" variants={itemVariants}>
+              <motion.a whileHover={{ scale: 0.85 }}>
+                <a href="/signinup" className="btn bsb-btn-xl btn-light gap-3">Cadastrar-se</a>
+              </motion.a>
+              <motion.a whileHover={{ scale: 0.85 }}>
+                <a href="/signinup" className="btn bsb-btn-xl btn-outline-light">Entrar</a>
+              </motion.a>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </motion.section>
+  );
 };
+
 export default Hero;
