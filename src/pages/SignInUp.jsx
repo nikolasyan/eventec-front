@@ -32,11 +32,13 @@ const SignInUp = () => {
   const [street, setStreet] = useState('');
   const [registrationStatus, setRegistrationStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   function refreshPage() {
     localStorage.clear();
     window.location.reload(false);
   }
+
   const handleZipCodeChange = async (cepValue) => {
     setZipcode(cepValue);
 
@@ -56,14 +58,16 @@ const SignInUp = () => {
       }
     }
   };
+
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
   };
 
   const handleFormSubmit = async () => {
     setIsLoading(true);
-    if (action === 'Cadastrar') {
+    setErrorMessage('');
 
+    if (action === 'Cadastrar') {
       try {
         const response = await axios.post('http://localhost:8080/api/users/create', {
           userid,
@@ -86,17 +90,14 @@ const SignInUp = () => {
         });
         console.log('Registration Successful', response.data);
         setRegistrationStatus('success');
-        setShowModalContent(true);
       } catch (error) {
         console.error('There was an error registering!', error);
         setRegistrationStatus('error');
-        setShowModalContent(true);
+        setErrorMessage('Ocorreu um erro! Por favor, revise os campos.');
       } finally {
-        setTimeout(() => {
-          setIsLoading(false); 
-        }, 1000);
+        setShowModalContent(true);
+        setIsLoading(false);
       }
-
     } else if (action === 'Login') {
       try {
         const response = await axios.post('http://localhost:8080/login', {
@@ -115,6 +116,11 @@ const SignInUp = () => {
         navigate('/MyAccount');
       } catch (error) {
         console.error('There was an error logging in!', error);
+        setErrorMessage('Login ou senha incorretos.');
+        setRegistrationStatus('error');
+        setShowModalContent(true);
+      } finally {
+        setIsLoading(false);
       }
     }
   };
@@ -123,89 +129,106 @@ const SignInUp = () => {
     <>
       <div className="row" style={{ height: "100vh" }}>
         <div className="col-3 d-none d-md-block gradient-background"></div>
-        <div className="p-5 col-12 col-md-9 formStyle">
+        <div className="px-5 col-12 col-md-9 formStyle">
           <div className='logoNavbar'>
             <img src={LogoImg} alt="Logo" />
           </div>
-          <div className="header">
+          <div className="header d-flex justify-content-between align-items-center">
             <div className="text">{action}</div>
+            <div>
+              {action === 'Cadastrar' ? (
+                <p>
+                  Já tem uma conta?{' '}
+                  <a href="#" onClick={() => setAction('Login')}>
+                    Faça o login
+                  </a>
+                </p>
+              ) : (
+                <p>
+                  Não tem uma conta ainda?{' '}
+                  <a href="#" onClick={() => setAction('Cadastrar')}>
+                    Crie uma
+                  </a>
+                </p>
+              )}
+            </div>
           </div>
-          <div className="btn-group" role="group" aria-label="Tipo de Usuário">
-            <input
-              className="btn-check"
-              type="radio"
-              id="usuarioComum"
-              autoComplete="off"
-              value="usuarioComum"
-              checked={userType === 'usuarioComum'}
-              onChange={handleUserTypeChange}
-            />
-            <label className="btn btn-outline-primary" htmlFor="usuarioComum">Externo</label>
+          <br />
 
-            <input
-              className="btn-check"
-              type="radio"
-              id="aluno"
-              autoComplete="off"
-              value="aluno"
-              checked={userType === 'aluno'}
-              onChange={handleUserTypeChange}
-            />
-            <label className="btn btn-outline-primary" htmlFor="aluno">Aluno</label>
+          {action === 'Cadastrar' && (
+            <div className="btn-group mb-5" role="group" aria-label="Tipo de Usuário">
+              <input
+                className="btn-check"
+                type="radio"
+                id="usuarioComum"
+                autoComplete="off"
+                value="usuarioComum"
+                checked={userType === 'usuarioComum'}
+                onChange={handleUserTypeChange}
+              />
+              <label className="btn btn-outline-primary" htmlFor="usuarioComum">Externo</label>
 
-            <input
-              className="btn-check"
-              type="radio"
-              id="professor"
-              autoComplete="off"
-              value="professor"
-              checked={userType === 'professor'}
-              onChange={handleUserTypeChange}
-            />
-            <label className="btn btn-outline-primary" htmlFor="professor">Professor</label>
+              <input
+                className="btn-check"
+                type="radio"
+                id="aluno"
+                autoComplete="off"
+                value="aluno"
+                checked={userType === 'aluno'}
+                onChange={handleUserTypeChange}
+              />
+              <label className="btn btn-outline-primary" htmlFor="aluno">Aluno</label>
 
-            <input
-              className="btn-check"
-              type="radio"
-              id="diretor"
-              autoComplete="off"
-              value="diretor"
-              checked={userType === 'diretor'}
-              onChange={handleUserTypeChange}
-            />
-            <label className="btn btn-outline-primary" htmlFor="diretor">Diretor</label>
-          </div>
+              <input
+                className="btn-check"
+                type="radio"
+                id="professor"
+                autoComplete="off"
+                value="professor"
+                checked={userType === 'professor'}
+                onChange={handleUserTypeChange}
+              />
+              <label className="btn btn-outline-primary" htmlFor="professor">Professor</label>
 
-          <br /><br /><br />
+              {/* <input
+                className="btn-check"
+                type="radio"
+                id="diretor"
+                autoComplete="off"
+                value="diretor"
+                checked={userType === 'diretor'}
+                onChange={handleUserTypeChange}
+              />
+              <label className="btn btn-outline-primary" htmlFor="diretor">Diretor</label> */}
+            </div>
+          )}
 
           <div className="row justify-content-center">
             {action === 'Login' ? (
-              <>
-                <div className="row justify-content-center">
-                  <div className="col-4">
-                    <div className="form-floating mb-3">
-                      <input className='form-control'
-                        type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)} placeholder='E-mail*'
-                      />
-                      <label className='form-label' htmlhtmlFor="email">E-mail*</label>
-                    </div>
+              <div className="row justify-content-center">
+                <div className="col-sm-12 col-md-7">
+                  <div className="form-floating mb-3">
+                    <input className='form-control'
+                      type="email"
+                      id="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)} placeholder='E-mail*'
+                    />
+                    <label className='form-label' htmlFor="email">E-mail*</label>
+                  </div>
 
-                    <div className="form-floating mb-3">
-                      <input className='form-control'
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder='Senha*'
-                      />
-                      <label className='form-label' htmlhtmlFor="password">Senha*</label>
-                    </div>
+                  <div className="form-floating mb-3">
+                    <input className='form-control'
+                      type="password"
+                      id="password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder='Senha*'
+                    />
+                    <label className='form-label' htmlFor="password">Senha*</label>
                   </div>
                 </div>
-              </>
+              </div>
             ) : (
               <>
                 <SignUpBasicInfo
@@ -234,7 +257,6 @@ const SignInUp = () => {
                 /> */}
 
                 {userType === 'aluno' && (
-
                   <SignUpAluno
                     emailInstitucional={emailInstitucional}
                     setEmailInstitucional={setEmailInstitucional}
@@ -245,17 +267,16 @@ const SignInUp = () => {
                     unidade={unidade}
                     setUnidade={setUnidade}
                     curso={curso}
-                    setCurso={setCurso} />
+                    setCurso={setCurso}
+                  />
                 )}
                 {userType === 'professor' && (
-                  <>
-                    <SignUpProfessor
-                      unidade={unidade}
-                      setUnidade={setUnidade}
-                      emailInstitucional={emailInstitucional}
-                      setEmailInstitucional={setEmailInstitucional}
-                    />
-                  </>
+                  <SignUpProfessor
+                    unidade={unidade}
+                    setUnidade={setUnidade}
+                    emailInstitucional={emailInstitucional}
+                    setEmailInstitucional={setEmailInstitucional}
+                  />
                 )}
                 {userType === 'diretor' && (
                   <SignUpDiretor
@@ -268,54 +289,46 @@ const SignInUp = () => {
               </>
             )}
             <div className="d-flex gap-3 justify-content-center loginRegisterbtn">
-              <div data-bs-toggle="modal" data-bs-target="#staticBackdrop" className={action === 'Login' ? 'btn btn-lg btn-outline-secondary' : 'btn btn-lg btn-success'}
-                onClick={() => {
-                  if (action === 'Cadastrar') {
-                    handleFormSubmit();
-                  } else {
-                    setAction('Cadastrar');
-                  }
-                }}
+              <button 
+                className="btn btn-lg btn-success"
+                onClick={handleFormSubmit}
+                data-bs-toggle="modal"
+                data-bs-target="#staticBackdrop"
               >
-                Cadastrar
-
-              </div>
-              <div
-                className={action === 'Cadastrar' ? 'btn btn-lg btn-outline-secondary' : 'btn btn-lg btn-success'}
-                onClick={() => {
-                  if (action === 'Login') {
-                    handleFormSubmit();
-                  } else {
-                    setAction('Login');
-                  }
-                }}
-              >
-                Entrar
-              </div>
+                {action}
+              </button>
             </div>
-
-            <div class="modal fade " id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-body">
+            
+            <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    {!isLoading && (
+                      <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    )}
+                  </div>
+                  <div className="modal-body">
                     {isLoading && <div className="spinner-border" role="status"></div>}
                     {showModalContent && !isLoading && (
                       registrationStatus === 'success' ?
                         'Conta criada com sucesso.\nAgora só precisa validar pelo e-mail que você recebeu!' :
-                        'Erro durante a operação.'
+                        errorMessage
                     )}
-
                   </div>
-                  <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-primary" onClick={refreshPage} >Continuar</button>
+                  <div className="modal-footer">
+                    {/* {!isLoading && (
+                      <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">F</button>
+                    )} */}
                   </div>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </div>
     </>
   );
 };
+
 export default SignInUp;
