@@ -7,9 +7,9 @@ const SignUpBasicInfo = ({
     password, setPassword 
   }) => {
     return (
-      <div className="col-3">
+      <div className="col-sm-12 col-md-5">
         <div className="d-flex justify-content-start">
-          <h4>Informações básicas</h4>
+          <h5>Informações básicas</h5>
         </div>
         <div className="form-floating mb-3">
           <input

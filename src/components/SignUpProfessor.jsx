@@ -2,9 +2,9 @@ import React from 'react'
 
 const SignUpProfessor = ({ setUnidade, unidade, emailInstitucional, setEmailInstitucional }) => {
     return (
-      <div className="col-3">
+      <div className="col-sm-12 col-md-5">
         <div className="d-flex justify-content-start">
-          <h4>Informações adicionais</h4>
+          <h5>Informações adicionais</h5>
         </div>
         <div className="form-floating mb-3">
                     <select className='form-select'

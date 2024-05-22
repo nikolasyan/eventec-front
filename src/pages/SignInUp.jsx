@@ -6,7 +6,7 @@ import SignUpAluno from '../components/SignUpAluno';
 import SignUpProfessor from '../components/SignUpProfessor';
 import SignUpBasicInfo from '../components/SignUpBasicInfo';
 import SignUpDiretor from '../components/SignUpDiretor';
-import SignUpAddress from '../components/SignUpAddress';
+// import SignUpAddress from '../components/SignUpAddress';
 
 const SignInUp = () => {
   const navigate = useNavigate();
@@ -122,8 +122,8 @@ const SignInUp = () => {
   return (
     <>
       <div className="row" style={{ height: "100vh" }}>
-        <div className="col-4 gradient-background"></div>
-        <div className="col-8 formStyle">
+        <div className="col-3 d-none d-md-block gradient-background"></div>
+        <div className="p-5 col-12 col-md-9 formStyle">
           <div className='logoNavbar'>
             <img src={LogoImg} alt="Logo" />
           </div>
@@ -140,7 +140,7 @@ const SignInUp = () => {
               checked={userType === 'usuarioComum'}
               onChange={handleUserTypeChange}
             />
-            <label className="btn btn-outline-primary" htmlFor="usuarioComum">Comunidade Externa</label>
+            <label className="btn btn-outline-primary" htmlFor="usuarioComum">Externo</label>
 
             <input
               className="btn-check"
@@ -219,7 +219,7 @@ const SignInUp = () => {
                   setPassword={setPassword}
                 />
 
-                <SignUpAddress
+                {/* <SignUpAddress
                   zipCode={zipCode}
                   setZipcode={setZipcode}
                   state={state}
@@ -231,7 +231,7 @@ const SignInUp = () => {
                   street={street}
                   setStreet={setStreet}
                   handleZipCodeChange={handleZipCodeChange}
-                />
+                /> */}
 
                 {userType === 'aluno' && (
 
