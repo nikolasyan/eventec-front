@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SignUpDiretor = ({ setUnidade, unidade, emailInstitucional, setEmailInstitucional }) => {
+const SignUpDiretor = ({ setUnidade, unidade, emailInstitucional, setEmailInstitucional, registro, setRegistro }) => {
     return (
       <div className="col-sm-12 col-md-5">
         <div className="d-flex justify-content-start">
@@ -29,6 +29,18 @@ const SignUpDiretor = ({ setUnidade, unidade, emailInstitucional, setEmailInstit
           />
           <label className='form-label' htmlFor="emailInstitucional">E-mail Fatec*</label>
         </div>
+
+        <div className="form-floating mb-3">
+          <input className='form-control'
+            type="text"
+            id="registro"
+            value={registro}
+            onChange={(e) => setRegistro(e.target.value)} 
+            placeholder='Registro*'
+          />
+          <label className='form-label' htmlFor="registro">Registro*</label>
+        </div>
+
       </div>
     );
   };

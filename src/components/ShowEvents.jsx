@@ -1,20 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-
-
 const ShowEvents = () => {
     const [events, setEvents] = useState([]);
     const [editingEventId, setEditingEventId] = useState(null);
     const [editedEventDate, setEditedEventDate] = useState('');
+    const [editedEndEventDate, setEditedEndEventDate] = useState('');
     const [eventUsers, setEventUsers] = useState([]);
     const [currentEventId, setCurrentEventId] = useState(null);
 
-
     useEffect(() => {
-
         const userEmail = localStorage.getItem('userEmail');
         const userPassword = localStorage.getItem('userPassword');
+        
 
         axios.get(`http://localhost:8080/myEvents?email=${userEmail}&password=${userPassword}`)
             .then(response => {
@@ -36,9 +34,10 @@ const ShowEvents = () => {
             });
     };
 
-    const startEditing = (eventId, eventDate) => {
+    const startEditing = (eventId, eventDate, endEventDate) => {
         setEditingEventId(eventId);
         setEditedEventDate(eventDate);
+        setEditedEndEventDate(endEventDate);
     };
 
     const fetchEventUsers = (eventId) => {
@@ -46,47 +45,41 @@ const ShowEvents = () => {
             .then(response => {
                 setCurrentEventId(eventId);
                 setEventUsers(response.data);
-                console.log(response.data)
+                console.log(response.data);
             })
             .catch(error => {
                 console.error("Erro ao buscar usuários do evento:", error);
             });
     };
-    
 
     const generateCertificates = (eventId) => {
         const selectedUsers = [];
+        const professorName = localStorage.getItem('userName');
+        const userid = localStorage.getItem('userid');
         document.querySelectorAll('input[type="checkbox"]:checked').forEach(checkbox => {
             selectedUsers.push(Number(checkbox.value));
         });
-
+    
         if (selectedUsers.length === 0) {
-            alert('Selecione pelo menos 1 usuário')
+            alert('Selecione pelo menos 1 usuário');
             return;
         }
     
-        axios.post(`http://localhost:8080/api/certifications/generate/${eventId}`, selectedUsers)
-            .then(response => {
-                alert("Certificados gerados com sucesso!");
-            })
-            .catch(error => {
-                console.error("Erro ao gerar certificados:", error);
-            });
-    };
-
-
-    
-    
-    
-
-
+        axios.post(`http://localhost:8080/api/certifications/generate/${eventId}?professorName=${professorName}&userid=${userid}`, selectedUsers)
+        .then(response => {
+            alert("Certificados gerados com sucesso!");
+        })
+        .catch(error => {
+            console.error("Erro ao gerar certificados:", error);
+        });
+    }
 
     const saveEditedEvent = () => {
-        axios.put(`http://localhost:8080/eventEdit/${editingEventId}`, { dateEvent: editedEventDate })
+        axios.put(`http://localhost:8080/eventEdit/${editingEventId}`, { dateEvent: editedEventDate, dateEndEvent: editedEndEventDate })
             .then(response => {
                 setEvents(events.map(event => {
                     if (event.id === editingEventId) {
-                        return { ...event, dateEvent: editedEventDate };
+                        return { ...event, dateEvent: editedEventDate, dateEndEvent: editedEndEventDate };
                     }
                     return event;
                 }));
@@ -99,20 +92,16 @@ const ShowEvents = () => {
     };
 
     return (
-
-
         <div className="container">
-
-            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="staticBackdropLabel">Concluir evento e enviar certificados</h1>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                   
+            <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="staticBackdropLabel">Concluir evento e enviar certificados</h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                        <p class="text-danger">Apenas envie certificados para pessoas que participaram do evento.</p>
+                        <div className="modal-body">
+                            <p className="text-danger">Apenas envie certificados para pessoas que participaram do evento.</p>
                             {eventUsers.map(user => (
                                 <div key={user.id} className="input-group mb-3">
                                     <div className="input-group-text">
@@ -122,11 +111,11 @@ const ShowEvents = () => {
                                     <input type="text" className="form-control" value={user.user.userName} aria-label="Text input with checkbox" disabled />
                                 </div>
                             ))}
-
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                            <button type="button" className="btn btn-primary" onClick={() => generateCertificates(currentEventId)}>Confirmar</button>                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="button" className="btn btn-primary" onClick={() => generateCertificates(currentEventId)}>Confirmar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -157,7 +146,7 @@ const ShowEvents = () => {
                                     </div>
                                     <div className="row">
                                         <div className="col-6 form-group">
-                                            <label htmlFor="data">Data e hora do evento</label>
+                                            <label htmlFor="data">Inicio do evento</label>
                                             {editingEventId === event.id ? (
                                                 <input type="datetime-local" className="form-control" id="data" value={editedEventDate} onChange={(e) => setEditedEventDate(e.target.value)} />
                                             ) : (
@@ -170,6 +159,38 @@ const ShowEvents = () => {
                                                 <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Aberto ao público?</label>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div className="row">
+                                        <div className="col-5 form-group">
+                                            <label htmlFor="data">Fim do evento</label>
+                                            {editingEventId === event.id ? (
+                                                <input type="datetime-local" className="form-control" id="data" value={editedEndEventDate} onChange={(e) => setEditedEndEventDate(e.target.value)} />
+                                            ) : (
+                                                <input type="datetime-local" className="form-control" id="dateEndEvent" value={event.dateEndEvent} disabled />
+                                            )}
+                                        </div>
+                                        <div className="col-4 form-group">
+                                            <label htmlFor="data">Carga Horária</label>
+                                            <input type="number" className="form-control" id="cargaHoraria" value={event.cargaHoraria} disabled />
+                                        </div>
+                                        <div className="col-3 form-group">
+                                            <label htmlFor="data">Nº de vagas</label>
+                                            <input type="number" className="form-control" id="vagas" value={event.vagas} disabled />
+                                        </div>
+                                    </div>
+                                    <div className="col-12">
+                                        <label htmlFor="descricao">Requisitos do evento</label>
+                                        <textarea className="form-control" id="preRequisitos" rows="3" placeholder="Requisitos do evento" value={event.preRequisitos} disabled></textarea>
+                                    </div>
+                                    <div className="col-12">
+                                        <label htmlFor="endereço">Modalidade</label>
+                                        <select type="text" className="form-control" id="modalidade" value={event.modalidade} disabled>
+                                            <option value="Remoto">Remoto</option>
+                                        </select>
+                                    </div>
+                                    <div className="col-12">
+                                        <label htmlFor="endereço">Link da reunião</label>
+                                        <input type="text" className="form-control" value={event.locationEvent} disabled />
                                     </div>
                                     <div className="col-12">
                                         <label htmlFor="endereço">Endereço</label>
@@ -190,14 +211,14 @@ const ShowEvents = () => {
                                             </>
                                         ) : (
                                             <div className="col-3">
-                                                <button className="btn btn-primary" onClick={() => startEditing(event.id, event.dateEvent)}>Editar</button>
+                                                <button className="btn btn-primary" onClick={() => startEditing(event.id, event.dateEvent, event.dateEndEvent)}>Editar</button>
                                             </div>
                                         )}
                                         <div className="col-3">
                                             <button className="btn btn-danger" onClick={() => deleteEvent(event.id)}>Deletar</button>
                                         </div>
                                         <div className="col-3">
-                                        <button className="btn btn-success" onClick={() => fetchEventUsers(event.id)} data-bs-toggle="modal" data-bs-target="#staticBackdrop">Concluir</button>
+                                            <button className="btn btn-success" onClick={() => fetchEventUsers(event.id)} data-bs-toggle="modal" data-bs-target="#staticBackdrop">Concluir</button>
                                         </div>
                                     </div>
                                 </div>

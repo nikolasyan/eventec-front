@@ -4,7 +4,6 @@ import LoggedNavbar from './LoggedNavbar';
 import CardEvent from '../components/CardEvent';
 import Footer from '../components/Footer';
 
-
 const haversineDistance = (lat1, lon1, lat2, lon2) => {
   const R = 6371; 
   const dLat = (lat2 - lat1) * (Math.PI / 180);
@@ -21,11 +20,11 @@ const haversineDistance = (lat1, lon1, lat2, lon2) => {
 const AllEvents = () => {
   const [userLocation, setUserLocation] = useState(null);
   const [allEvents, setAllEvents] = useState([]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [userid] = useState(localStorage.getItem('userid'));
   const [userName] = useState(localStorage.getItem('userName'));
   const [userEmail] = useState(localStorage.getItem('userEmail'));
   const [userType] = useState(localStorage.getItem('userType'));
-
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -39,7 +38,7 @@ const AllEvents = () => {
     const latitude = position.coords.latitude;
     const longitude = position.coords.longitude;
     setUserLocation({ lat: latitude, lng: longitude });
-  } 
+  }
 
   const filterEventsNearby = (radius = 10) => {
     if (!userLocation) return [];
@@ -61,7 +60,26 @@ const AllEvents = () => {
       getUserLocation();
     } else {
       const nearbyEvents = filterEventsNearby();
-      setAllEvents(nearbyEvents);
+      setFilteredEvents(nearbyEvents);
+    }
+  }
+
+  const handleFilterAlphabetical = () => {
+    const sortedEvents = [...allEvents].sort((a, b) => a.title.localeCompare(b.title));
+    setFilteredEvents(sortedEvents);
+  }
+
+  const handleFilterByDate = () => {
+    const sortedEvents = [...allEvents].sort((a, b) => new Date(a.dateEvent) - new Date(b.dateEvent));
+    setFilteredEvents(sortedEvents);
+  }
+
+  const handleFilterByCategory = (category) => {
+    if (category === "Todos") {
+      setFilteredEvents(allEvents);
+    } else {
+      const filteredByCategory = allEvents.filter(event => event.category === category);
+      setFilteredEvents(filteredByCategory);
     }
   }
 
@@ -69,8 +87,8 @@ const AllEvents = () => {
     const fetchAllEvents = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/approvedEvents/${userType}`);
-        console.log(response.data); 
         setAllEvents(response.data);
+        setFilteredEvents(response.data);
       } catch (error) {
         console.error('Error fetching all events', error);
       }
@@ -78,22 +96,24 @@ const AllEvents = () => {
   
     fetchAllEvents();
   }, [userType]);
-  
-  
+
   useEffect(() => {
     if (userLocation) {
       const nearbyEvents = filterEventsNearby();
-      setAllEvents(nearbyEvents);
+      setFilteredEvents(nearbyEvents);
     }
   }, [userLocation]);
-  
+
   const handleSubscribeToEvent = async (eventId, title, dateEvent, address) => {
     try {
       const response = await axios.post('http://localhost:8080/subscriptions', null, {
         params: {
           userid,
           userName,
-          eventId,title, dateEvent, address
+          eventId,
+          title,
+          dateEvent,
+          address
         }
       });
   
@@ -101,7 +121,7 @@ const AllEvents = () => {
         alert(response.data);
       } else if (!userid) {
         console.error("userid não encontrado.");
-      } else{
+      } else {
         console.error("Erro ao se inscrever no evento.");
       }
     } catch (error) {
@@ -132,40 +152,66 @@ const AllEvents = () => {
     <>
       <LoggedNavbar />
       <div className="container-bg">
-      <div className="container">
-        <div className="d-flex justify-content-">
-          <h3>Confira os eventos disponíveis</h3>
-        </div>
-      
-      <br /><br /><br />
-      <div className='container'>
-        <div className="row">
-          <div className="col-3">
-            <h4>Eventos próximos a mim</h4>
-            <p class="text-danger">Para maior precisão, prefira uma rede móvel, e não utilize VPNs.</p>
-            <button type='submit' className='btn btn-primary' onClick={handleFilterNearby}>Próximos a mim</button>
+        <div className="container">
+          <div className="d-flex">
+            <h3>Confira os eventos disponíveis</h3>
+          </div>
+          <br /><br /><br />
+          <div className='container'>
+            <div className="row">
+              <div className="col-sm-12 col-md-6 mb-5">
+                <h4>Eventos próximos a mim</h4>
+                <p className="text-danger">Para maior precisão, prefira uma rede móvel, e não utilize VPNs.</p>
+                <button type='submit' className='btn btn-primary' onClick={handleFilterNearby}>Próximos a mim</button>
+              </div>
+              <div className="col-sm-12 col-md-6 mb-5">
+                <h4>Filtrar por: </h4>
+                <div className="d-flex gap-2 justify-content-center">
 
-          </div>
-          <div className="col-9 d-grid gap-4">
-            {allEvents.map(event => (
-              <CardEvent 
-                key={event.id}
-                eventTitle={event.title}
-                eventDescription={event.description}
-                eventCategory={event.category}
-                eventAddress={event.address}
-                eventDate={event.dateEvent}
-                distance={event.distanceFromUser}
-                cargaHora={event.cargaHoraria} 
-                onSubscribe={() => handleSubscribeToEvent(event.id)} 
-              />
-            ))}
+                  <button type='submit' className='btn btn-primary' onClick={handleFilterAlphabetical}>Alfabética</button>
+
+
+                  <button type='submit' className='btn btn-primary' onClick={handleFilterByDate}>Data</button>
+
+                </div>
+                <div className="row mt-3 justify-content-center">
+                  <div className="col-8">
+                  <label htmlFor="filtroCategoria">Filtrar por categoria: </label>
+                  <select onChange={(e) => handleFilterByCategory(e.target.value)} className="form-select">
+                    <option value="Todos">Todas categorias</option>
+                    <option value="financas">Finanças</option>
+                    <option value="tecnologia">Tecnologia</option>
+                    <option value="comunicacao">Comunicação</option>
+                  </select>
+                  </div>
+
+                </div>
+              </div>
+              <div className="d-flex flex-wrap justify-content-center gap-4">
+                {filteredEvents.map(event => (
+                  <CardEvent 
+                    key={event.id}
+                    eventTitle={event.title}
+                    eventDescription={event.description}
+                    eventCategory={event.category}
+                    eventAddress={event.address}
+                    eventDate={event.dateEvent}
+                    distance={event.distanceFromUser}
+                    cargaHora={event.cargaHoraria} 
+                    dateEndEvent={event.dateEndEvent}
+                    vagas={event.vagas}
+                    bannerImage={event.bannerImage}
+                    onSubscribe={() => handleSubscribeToEvent(event.id, event.title, event.dateEvent, event.address)} 
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
+        <Footer />
       </div>
-      </div>
-      <Footer/></div></>
-  )
+    </>
+  );
 }
 
 export default AllEvents;

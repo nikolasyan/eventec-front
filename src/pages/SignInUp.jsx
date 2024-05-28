@@ -24,6 +24,7 @@ const SignInUp = () => {
   const [curso, setCurso] = useState('');
   const [showModalContent, setShowModalContent] = useState(false);
   const [userid] = useState('');
+  const [registro, setRegistro] = useState('');
 
   const [zipCode, setZipcode] = useState('');
   const [state, setState] = useState('');
@@ -77,6 +78,7 @@ const SignInUp = () => {
           userType,
           cpf,
           emailInstitucional,
+          registro,
           ra,
           semestre,
           curso,
@@ -116,7 +118,7 @@ const SignInUp = () => {
         navigate('/MyAccount');
       } catch (error) {
         console.error('There was an error logging in!', error);
-        setErrorMessage('Login ou senha incorretos.');
+        setErrorMessage(error.response?.data || 'Login ou senha incorretos.');
         setRegistrationStatus('error');
         setShowModalContent(true);
       } finally {
@@ -190,7 +192,7 @@ const SignInUp = () => {
               />
               <label className="btn btn-outline-primary" htmlFor="professor">Professor</label>
 
-              {/* <input
+              <input
                 className="btn-check"
                 type="radio"
                 id="diretor"
@@ -199,7 +201,7 @@ const SignInUp = () => {
                 checked={userType === 'diretor'}
                 onChange={handleUserTypeChange}
               />
-              <label className="btn btn-outline-primary" htmlFor="diretor">Diretor</label> */}
+              <label className="btn btn-outline-primary" htmlFor="diretor">Diretor</label>
             </div>
           )}
 
@@ -276,6 +278,7 @@ const SignInUp = () => {
                     setUnidade={setUnidade}
                     emailInstitucional={emailInstitucional}
                     setEmailInstitucional={setEmailInstitucional}
+                    setRegistro={setRegistro}
                   />
                 )}
                 {userType === 'diretor' && (
@@ -284,6 +287,7 @@ const SignInUp = () => {
                     setUnidade={setUnidade}
                     emailInstitucional={emailInstitucional}
                     setEmailInstitucional={setEmailInstitucional}
+                    setRegistro={setRegistro}
                   />
                 )}
               </>
@@ -314,11 +318,6 @@ const SignInUp = () => {
                         'Conta criada com sucesso.\nAgora só precisa validar pelo e-mail que você recebeu!' :
                         errorMessage
                     )}
-                  </div>
-                  <div className="modal-footer">
-                    {/* {!isLoading && (
-                      <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">F</button>
-                    )} */}
                   </div>
                 </div>
               </div>
