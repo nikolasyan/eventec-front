@@ -92,7 +92,7 @@ const ShowEvents = () => {
     };
 
     return (
-        <div className="container">
+        <div className="container mt-5 mt-lg-0">
             <div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
@@ -160,8 +160,8 @@ const ShowEvents = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="row">
-                                        <div className="col-5 form-group">
+                                    <div className="row justify-content-center">
+                                        <div className="col-sm-12 col-lg-5 form-group">
                                             <label htmlFor="data">Fim do evento</label>
                                             {editingEventId === event.id ? (
                                                 <input type="datetime-local" className="form-control" id="data" value={editedEndEventDate} onChange={(e) => setEditedEndEventDate(e.target.value)} />
@@ -169,11 +169,11 @@ const ShowEvents = () => {
                                                 <input type="datetime-local" className="form-control" id="dateEndEvent" value={event.dateEndEvent} disabled />
                                             )}
                                         </div>
-                                        <div className="col-4 form-group">
+                                        <div className="col-sm-12 col-lg-4 form-group">
                                             <label htmlFor="data">Carga Horária</label>
                                             <input type="number" className="form-control" id="cargaHoraria" value={event.cargaHoraria} disabled />
                                         </div>
-                                        <div className="col-3 form-group">
+                                        <div className="col-sm-12 col-lg-3 form-group">
                                             <label htmlFor="data">Nº de vagas</label>
                                             <input type="number" className="form-control" id="vagas" value={event.vagas} disabled />
                                         </div>

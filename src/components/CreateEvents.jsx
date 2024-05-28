@@ -37,6 +37,29 @@ const CreateEvents = () => {
     }
   };
 
+  const calculateCargaHoraria = (startDate, endDate) => {
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const diffInHours = Math.floor((end - start) / (1000 * 60 * 60)); // diferença em horas arredondada para baixo
+      setCargaHoraria(diffInHours);
+    } else {
+      setCargaHoraria('');
+    }
+  };
+
+  const handleDateEventChange = (e) => {
+    const newDateEvent = e.target.value;
+    setDateEvent(newDateEvent);
+    calculateCargaHoraria(newDateEvent, dateEndEvent);
+  };
+
+  const handleDateEndEventChange = (e) => {
+    const newDateEndEvent = e.target.value;
+    setDateEndEvent(newDateEndEvent);
+    calculateCargaHoraria(dateEvent, newDateEndEvent);
+  };
+
   const handleFormEventSubmit = async (event) => {
     event.preventDefault();
 
@@ -77,7 +100,17 @@ const CreateEvents = () => {
     }
   };
 
-  const handleCloseSuccessModal = () => setShowSuccessModal(false); // Função para fechar o modal de sucesso
+  const handleCloseSuccessModal = () => {
+    setShowSuccessModal(false)
+    window.location.reload();
+  }; // Função para fechar o modal de sucesso
+
+  // Obtém a data atual em formato yyyy-MM-ddThh:mm
+  const getCurrentDateTime = () => {
+    const now = new Date();
+    now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+    return now.toISOString().slice(0,16);
+  };
 
   return (
     <>
@@ -104,7 +137,7 @@ const CreateEvents = () => {
         <div className="row">
           <div className="col-6 form-group">
             <label htmlFor="dateEvent">Inicio do evento</label>
-            <input type="datetime-local" className="form-control" id="dateEvent" value={dateEvent} onChange={(e) => setDateEvent(e.target.value)} required />
+            <input type="datetime-local" className="form-control" id="dateEvent" value={dateEvent} onChange={handleDateEventChange} min={getCurrentDateTime()} required />
           </div>
           <div className="col-6 openEventInput">
             <div className="form-check form-switch open">
@@ -115,17 +148,17 @@ const CreateEvents = () => {
         </div>
 
         <div className="row">
-          <div className="col-4 form-group">
-            <label htmlFor="dateEndEvent">Encerramento do evento</label>
-            <input type="datetime-local" className="form-control" id="dateEndEvent" value={dateEndEvent} onChange={(e) => setDateEndEvent(e.target.value)} required />
+          <div className="col-sm-12 col-lg-4 form-group">
+            <label htmlFor="dateEndEvent">Fim do evento</label>
+            <input type="datetime-local" className="form-control" id="dateEndEvent" value={dateEndEvent} onChange={handleDateEndEventChange} min={dateEvent || getCurrentDateTime()} required />
           </div>
 
-          <div className="col-4 form-group">
+          <div className="col-sm-12 col-lg-4 form-group">
           <label htmlFor="cargaHoraria">Carga horária</label>
-          <input type="number" className="form-control" id="cargaHoraria" placeholder="Digite a carga horária" value={cargaHoraria} onChange={(e) => setCargaHoraria(e.target.value)} required />
+          <input type="number" className="form-control" id="cargaHoraria" placeholder="Digite a carga horária" value={cargaHoraria} onChange={(e) => setCargaHoraria(e.target.value)} readOnly />
           </div>
           
-          <div className="col-4 form-group">
+          <div className="col-sm-12 col-lg-4 form-group">
           <label htmlFor="vagas">Número de vagas</label>
           <input type="number" className="form-control" id="vagas" placeholder="Digite o número de vagas" value={vagas} onChange={(e) => setVagas(e.target.value)} required />
           </div>
@@ -174,12 +207,14 @@ const CreateEvents = () => {
         </div>
         <br />
         <div className="row justify-content-center">
-          <button type="submit" className="col-4 btn btn-primary">Enviar</button>
+          <button type="submit" className="col-4 btn btn-primary mb-5 ">Enviar</button>
         </div>
       </form>
 
-      <div className={`modal fade ${showSuccessModal ? 'show' : ''}`} id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden={!showSuccessModal} style={showSuccessModal ? {display: 'block'} : {}}>
-        <div className="modal-dialog">
+    <hr className='d-sm-block d-lg-none'/>
+
+      <div className={`modal fade ${showSuccessModal ? 'show d-block' : ''}`} id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden={!showSuccessModal}>
+        <div className="modal-dialog modal-dialog-centered">
           <div className="modal-content">
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel">Sucesso</h1>
@@ -194,6 +229,7 @@ const CreateEvents = () => {
           </div>
         </div>
       </div>
+      {showSuccessModal && <div className="modal-backdrop fade show"></div>}
     </>
   );
 }
