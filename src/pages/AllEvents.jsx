@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { motion } from 'framer-motion';
 import LoggedNavbar from './LoggedNavbar';
 import CardEvent from '../components/CardEvent';
 import Footer from '../components/Footer';
@@ -153,8 +154,8 @@ const AllEvents = () => {
       <LoggedNavbar />
       <div className="container-bg">
         <div className="container">
-          <div className="d-flex">
-            <h3>Confira os eventos disponíveis</h3>
+          <div className="d-flex justify-content-center justify-content-lg-start">
+            <h3 >Confira os eventos disponíveis</h3>
           </div>
           <br /><br /><br />
           <div className='container'>
@@ -167,42 +168,43 @@ const AllEvents = () => {
               <div className="col-sm-12 col-md-6 mb-5">
                 <h4>Filtrar por: </h4>
                 <div className="d-flex gap-2 justify-content-center">
-
                   <button type='submit' className='btn btn-primary' onClick={handleFilterAlphabetical}>Alfabética</button>
-
-
                   <button type='submit' className='btn btn-primary' onClick={handleFilterByDate}>Data</button>
-
                 </div>
                 <div className="row mt-3 justify-content-center">
                   <div className="col-8">
-                  <label htmlFor="filtroCategoria">Filtrar por categoria: </label>
-                  <select onChange={(e) => handleFilterByCategory(e.target.value)} className="form-select">
-                    <option value="Todos">Todas categorias</option>
-                    <option value="financas">Finanças</option>
-                    <option value="tecnologia">Tecnologia</option>
-                    <option value="comunicacao">Comunicação</option>
-                  </select>
+                    <label htmlFor="filtroCategoria">Filtrar por categoria: </label>
+                    <select onChange={(e) => handleFilterByCategory(e.target.value)} className="form-select">
+                      <option value="Todos">Todas categorias</option>
+                      <option value="financas">Finanças</option>
+                      <option value="tecnologia">Tecnologia</option>
+                      <option value="comunicacao">Comunicação</option>
+                    </select>
                   </div>
-
                 </div>
               </div>
               <div className="d-flex flex-wrap justify-content-center gap-4">
-                {filteredEvents.map(event => (
-                  <CardEvent 
+                {filteredEvents.map((event, index) => (
+                  <motion.div
                     key={event.id}
-                    eventTitle={event.title}
-                    eventDescription={event.description}
-                    eventCategory={event.category}
-                    eventAddress={event.address}
-                    eventDate={event.dateEvent}
-                    distance={event.distanceFromUser}
-                    cargaHora={event.cargaHoraria} 
-                    dateEndEvent={event.dateEndEvent}
-                    vagas={event.vagas}
-                    bannerImage={event.bannerImage}
-                    onSubscribe={() => handleSubscribeToEvent(event.id, event.title, event.dateEvent, event.address)} 
-                  />
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 1, delay: index * 0.5 }}
+                  >
+                    <CardEvent 
+                      eventTitle={event.title}
+                      eventDescription={event.description}
+                      eventCategory={event.category}
+                      eventAddress={event.address}
+                      eventDate={event.dateEvent}
+                      distance={event.distanceFromUser}
+                      cargaHora={event.cargaHoraria} 
+                      dateEndEvent={event.dateEndEvent}
+                      vagas={event.vagas}
+                      bannerImage={event.bannerImage}
+                      onSubscribe={() => handleSubscribeToEvent(event.id, event.title, event.dateEvent, event.address)} 
+                    />
+                  </motion.div>
                 ))}
               </div>
             </div>
