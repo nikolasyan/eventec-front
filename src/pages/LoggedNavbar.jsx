@@ -4,7 +4,7 @@ const LoggedNavbar = () => {
   return (
     <nav className="navbar bg-primary navbar-expand-xl navbar-dark loggedNavbar">
       <div class="container">
-        <a href="/home" class="navbar-brand logoEventec">Eventec</a>
+        <a href="/dashboard" class="navbar-brand logoEventec">Eventec</a>
         <button class="navbar-toggler" type="button"
           data-bs-toggle="offcanvas"
           data-bs-target="#navbarOffcanvas"

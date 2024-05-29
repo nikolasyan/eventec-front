@@ -3,8 +3,8 @@ import React from 'react';
 const CardEvent = ({ eventTitle, eventDescription, eventCategory, cargaHora, eventAddress, eventDate, distance, onSubscribe, dateEndEvent, vagas, bannerImage }) => {
 
   return (
-    <div className="card text-start" style={{ maxWidth: "400px" }}>
-      <img src={`data:image/jpeg;base64,${bannerImage}`} className="card-img-top" alt="banner" style={{ maxHeight: "200px", width: "100%"}} />
+    <><div className="card text-start" style={{ maxWidth: "400px" }}>
+      <img src={`data:image/jpeg;base64,${bannerImage}`} className="card-img-top" alt="banner" style={{ maxHeight: "200px", width: "100%" }} />
       <div className="card-body cardEvent">
         <h4 className="card-title">{eventTitle}</h4>
         <strong className="card-text">{eventDescription}</strong>
@@ -24,14 +24,14 @@ const CardEvent = ({ eventTitle, eventDescription, eventCategory, cargaHora, eve
         <span><strong>Modalidade:</strong> Remoto</span>
         <span><strong>Número de vagas:</strong> {vagas}</span>
         <br />
-        <button className="btn btn-primary" onClick={(e) => {
-            e.preventDefault(); // Evitar a ação padrão do link
-            onSubscribe(); // Chamar a função passada como prop
-          }}>
-            Inscrever-se
+        <button data-bs-toggle="modal" data-bs-target="#modalInscricao" className="btn btn-primary" onClick={(e) => {
+          e.preventDefault(); // Evitar a ação padrão do link
+          onSubscribe(); // Chamar a função passada como prop
+        } }>
+          Inscrever-se
         </button>
       </div>
-    </div>
+    </div></>
   );
 };
 

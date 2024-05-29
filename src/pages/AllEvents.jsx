@@ -26,6 +26,7 @@ const AllEvents = () => {
   const [userName] = useState(localStorage.getItem('userName'));
   const [userEmail] = useState(localStorage.getItem('userEmail'));
   const [userType] = useState(localStorage.getItem('userType'));
+  const [modalMessage, setModalMessage] = useState('');
 
   const getUserLocation = () => {
     if (navigator.geolocation) {
@@ -119,15 +120,15 @@ const AllEvents = () => {
       });
   
       if (response.status === 200) {
-        alert(response.data);
+        setModalMessage('Inscrição realizada com sucesso!');
       } else if (!userid) {
-        console.error("userid não encontrado.");
+        setModalMessage("userid não encontrado.");
       } else {
-        console.error("Erro ao se inscrever no evento.");
+        setModalMessage("Erro ao se inscrever no evento.");
       }
     } catch (error) {
       console.error('Error subscribing to the event', error);
-      alert('Erro ao se inscrever. Por favor, tente novamente.');
+      setModalMessage('Erro ao se inscrever. Por favor, tente novamente.');
     }
   }
 
@@ -189,7 +190,7 @@ const AllEvents = () => {
                     key={event.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    transition={{ duration: 1, delay: index * 0.5 }}
+                    transition={{ duration: 1, delay: index * 0.2 }}
                   >
                     <CardEvent 
                       eventTitle={event.title}
@@ -211,6 +212,19 @@ const AllEvents = () => {
           </div>
         </div>
         <Footer />
+      </div>
+
+      <div className="modal fade" id="modalInscricao" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-body">
+              {modalMessage}
+            </div>
+            <div className="modal-footer justify-content-center">
+              <button type="button" className="btn btn-primary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+          </div>
+        </div>
       </div>
     </>
   );

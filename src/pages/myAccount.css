@@ -24,3 +24,7 @@
 .menuContainer{
     height: 100%;
 }
+
+.botoesaqui .card{
+    cursor: pointer;
+}

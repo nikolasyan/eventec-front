@@ -115,7 +115,7 @@ const SignInUp = () => {
         localStorage.setItem('cpf', cpf);
         const accountDetailsResponse = await axios.get(`http://localhost:8080/api/users/myAccount?email=${email}&password=${password}`);
         console.log('Account Details:', accountDetailsResponse.data);
-        navigate('/MyAccount');
+        navigate('/dashboard');
       } catch (error) {
         console.error('There was an error logging in!', error);
         setErrorMessage(error.response?.data || 'Login ou senha incorretos.');
