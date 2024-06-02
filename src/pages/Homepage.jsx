@@ -33,7 +33,7 @@ function Homepage() {
       <AboutUs/>
       <TechGrid/>
       <Team/>
-      <Footer/>
+      {/* <Footer/> */}
     </div>
   );
 }

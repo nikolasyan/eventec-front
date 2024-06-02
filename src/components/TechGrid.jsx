@@ -11,7 +11,7 @@ import heroku from '../assets/images/heroku-logo.png';
 
 const TechGrid = () => {
     return (
-        <div className="container">
+        <div className="container p-5">
             <div className="row" data-masonry='{"percentPosition": true }'>
                 <div className="col-sm-6 col-lg-4 mb-4">
                     <div className="card">
