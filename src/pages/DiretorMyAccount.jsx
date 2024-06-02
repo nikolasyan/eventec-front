@@ -67,7 +67,7 @@ const DiretorMyAccount = () => {
             </div>
         </div>
     );
-    if (localStorage.userType === "professor" || localStorage.userType === "diretor") {
+    if ( localStorage.userType === "diretor") {
     return (
         <><LoggedNavbar/>
         <div className="container-bg">

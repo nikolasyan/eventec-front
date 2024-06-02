@@ -156,7 +156,7 @@ const MyAccount = () => {
             <br />
             <hr />
             <br />
-            <div className="row justify-content-between ">
+            <div className="row justify-content-start gap-5 ">
               <div className="col-lg-6 col-xl-3 myAccountBox">
 
                 <div className="d-flex align-items-center flex-column justify-content-between menuContainer">
@@ -284,7 +284,7 @@ const MyAccount = () => {
                 </form>
               </div>
 
-              <div className='col-lg-12 col-xl-4 myAccountBox'>
+              {/* <div className='col-lg-12 col-xl-4 myAccountBox'>
 
                 <div className='d-flex justify-content-between'>
                   <h5>Seu endereço: </h5>
@@ -317,7 +317,7 @@ const MyAccount = () => {
                   </div>
 
                 </form>
-              </div>
+              </div> */}
             </div>
 
           </div><Footer /></div></></>

@@ -192,7 +192,7 @@ const SignInUp = () => {
               />
               <label className="btn btn-outline-primary" htmlFor="professor">Professor</label>
 
-              <input
+              {/* <input
                 className="btn-check"
                 type="radio"
                 id="diretor"
@@ -201,7 +201,7 @@ const SignInUp = () => {
                 checked={userType === 'diretor'}
                 onChange={handleUserTypeChange}
               />
-              <label className="btn btn-outline-primary" htmlFor="diretor">Diretor</label>
+              <label className="btn btn-outline-primary" htmlFor="diretor">Diretor</label> */}
             </div>
           )}
 

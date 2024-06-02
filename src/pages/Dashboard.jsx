@@ -6,11 +6,6 @@ import "./myAccount.css";
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
-    const navigate = useNavigate();
-    const [userInfo, setInfo] = useState({});
-    const [erro, setErro] = useState(null);
-    const [mostSubscribedEvents, setMostSubscribedEvents] = useState([]);
-    const userType = localStorage.getItem('userType');
 
     useEffect(() => {
         const removeElements = () => {
@@ -28,48 +23,121 @@ const Dashboard = () => {
         
         setTimeout(removeElements, 1000);
     }, []);
+
+
+    const navigate = useNavigate();
+    const [userInfo, setInfo] = useState({});
+    const [erro, setErro] = useState(null);
+    const [currentPassword, setCurrentPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [changePasswordError, setChangePasswordError] = useState(null);
+    const [showPasswordFields, setShowPasswordFields] = useState(false);
+    const [mostSubscribedEvents, setMostSubscribedEvents] = useState([]);
+  
+  
+    const [userid] = useState('');
+    localStorage.setItem('userid', userInfo.userid);
+    localStorage.setItem('userName', userInfo.userName)
+    localStorage.setItem('userType', userInfo.userType)
+    localStorage.setItem('emailValidationType', userInfo.emailValidationType)
+  
+  
+    const handleChangePassword = async () => {
+      const currentPasswordInput = document.getElementById('currentPassword');
+      const newPasswordInput = document.getElementById('newPassword');
+      const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
+  
+      const currentPassword = currentPasswordInput.value;
+      const newPassword = newPasswordInput.value;
+      const confirmNewPassword = confirmNewPasswordInput.value;
+  
+      if (newPassword !== confirmNewPassword) {
+        setChangePasswordError('As senhas não coincidem');
+        return;
+      }
+  
+      try {
+        const response = await fetch(`http://localhost:8080/api/users/changePassword?email=${userInfo.email}&currentPassword=${currentPassword}&newPassword=${newPassword}`, {
+          method: 'POST',
+        });
+  
+        if (response.ok) {
+          setCurrentPassword('');
+          setNewPassword('');
+          confirmNewPasswordInput.value = '';
+          setChangePasswordError(null);
+          console.log("Senha trocada com sucesso! Favor fazer login novamente");
+          window.location.href = '/signinup';
+        } else {
+          setChangePasswordError('Senha atual incorreta');
+        }
+      } catch (error) {
+        console.error('Erro ao trocar a senha:', error);
+        setChangePasswordError('Erro ao trocar a senha');
+      }
+    };
+  
+  
+    const handleDeleteAccount = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/api/users/deleteAccount?email=${userInfo.email}&password=${userInfo.password}`, {
+          method: 'DELETE',
+        });
+  
+        if (response.ok) {
+          console.log("Excluído com sucesso")
+          navigate('/');
+        } else {
+          console.log("nada a exibir aqui.")
+        }
+      } catch (error) {
+        console.error('Erro ao excluir a conta:', error);
+      }
+    };
+  
+  
   
     useEffect(() => {
-        const userid = localStorage.getItem('userid');
-        const email = localStorage.getItem('userEmail');
-        const password = localStorage.getItem('userPassword');
-
-        const consult = async () => {
-            try {
-                const url = `http://localhost:8080/api/users/myAccount?email=${email}&password=${password}`;
-                const answer = await fetch(url);
-                if (!answer.ok) {
-                    throw new Error();
-                }
-                const data = await answer.json();
-                setInfo(data);
-            } catch (error) {
-                setErro(error.message);
-            }
-        };
-
-        consult();
-    }, []);
-
+      const userid = localStorage.getItem('userid')
+      const email = localStorage.getItem('userEmail');
+      const password = localStorage.getItem('userPassword');
+  
+      const consult = async () => {
+        try {
+          const url = `http://localhost:8080/api/users/myAccount?email=${email}&password=${password}`;
+          const answer = await fetch(url);
+          if (!answer.ok) {
+            throw new Error();
+          }
+          const data = await answer.json()
+          setInfo(data)
+        } catch (error) {
+          setErro(error.message)
+        }
+      }
+  
+      consult()
+    }, [])
+  
     useEffect(() => {
-        const fetchMostSubscribedEvents = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/subscriptions/most-subscribed-events');
-                if (response.ok) {
-                    const data = await response.json();
-                    const eventsArray = Object.keys(data).map(key => ({ title: key, description: key, count: data[key] }));
-                    eventsArray.sort((a, b) => b.count - a.count);
-                    const top3Events = eventsArray.slice(0, 3);
-                    setMostSubscribedEvents(top3Events);
-                } else {
-                    console.error('Erro ao buscar eventos mais inscritos');
-                }
-            } catch (error) {
-                console.error('Erro ao buscar eventos mais inscritos:', error);
-            }
-        };
-
-        fetchMostSubscribedEvents();
+      const fetchMostSubscribedEvents = async () => {
+        try {
+          const response = await fetch('http://localhost:8080/subscriptions/most-subscribed-events');
+          if (response.ok) {
+            const data = await response.json();
+            const eventsArray = Object.keys(data).map(key => ({ title: key, description:key, count: data[key] }));
+            eventsArray.sort((a, b) => b.count - a.count);
+            const top3Events = eventsArray.slice(0, 3);
+            setMostSubscribedEvents(top3Events);
+          } else {
+            console.error('Erro ao buscar eventos mais inscritos');
+          }
+        } catch (error) {
+          console.error('Erro ao buscar eventos mais inscritos:', error);
+        }
+      };
+  
+      fetchMostSubscribedEvents();
     }, []);
 
     const cardVariants = {
@@ -150,7 +218,7 @@ const Dashboard = () => {
                                 <p className="card-text">Conferir os seus dados.</p>
                             </div>
                         </motion.div>
-                        {(userType === 'professor' || userType === 'diretor') && (
+                        {(localStorage.userType === 'professor' || localStorage.userType === 'diretor') && (
                             <motion.div 
                                 className="card text-bg-light mb-3 border-3 pe-auto" 
                                 style={{ width: '18rem' }} 
@@ -167,7 +235,7 @@ const Dashboard = () => {
                                 </div>
                             </motion.div>
                         )}
-                        {userType === 'diretor' && (
+                        {localStorage.userType === 'diretor' && (
                             <motion.div 
                                 className="card text-bg-dark mb-3 pe-auto" 
                                 style={{ width: '18rem' }} 
