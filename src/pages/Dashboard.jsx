@@ -3,10 +3,9 @@ import Footer from '../components/Footer';
 import LoggedNavbar from './LoggedNavbar';
 import { motion } from 'framer-motion';
 import "./myAccount.css";
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';  // Substituindo useNavigate por useHistory
 
 const Dashboard = () => {
-
     useEffect(() => {
         const removeElements = () => {
             const staticBackdrop = document.getElementById("staticBackdrop");
@@ -24,8 +23,7 @@ const Dashboard = () => {
         setTimeout(removeElements, 1000);
     }, []);
 
-
-    const navigate = useNavigate();
+    const history = useHistory();  // Substituindo navigate por history
     const [userInfo, setInfo] = useState({});
     const [erro, setErro] = useState(null);
     const [currentPassword, setCurrentPassword] = useState('');
@@ -33,15 +31,13 @@ const Dashboard = () => {
     const [changePasswordError, setChangePasswordError] = useState(null);
     const [showPasswordFields, setShowPasswordFields] = useState(false);
     const [mostSubscribedEvents, setMostSubscribedEvents] = useState([]);
-  
-  
+
     const [userid] = useState('');
     localStorage.setItem('userid', userInfo.userid);
-    localStorage.setItem('userName', userInfo.userName)
-    localStorage.setItem('userType', userInfo.userType)
-    localStorage.setItem('emailValidationType', userInfo.emailValidationType)
-  
-  
+    localStorage.setItem('userName', userInfo.userName);
+    localStorage.setItem('userType', userInfo.userType);
+    localStorage.setItem('emailValidationType', userInfo.emailValidationType);
+
     const handleChangePassword = async () => {
       const currentPasswordInput = document.getElementById('currentPassword');
       const newPasswordInput = document.getElementById('newPassword');
@@ -76,23 +72,22 @@ const Dashboard = () => {
         setChangePasswordError('Erro ao trocar a senha');
       }
     };
-  
-  
+
     const handleDeleteAccount = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/api/users/deleteAccount?email=${userInfo.email}&password=${userInfo.password}`, {
-          method: 'DELETE',
-        });
-  
-        if (response.ok) {
-          console.log("Excluído com sucesso")
-          navigate('/');
-        } else {
-          console.log("nada a exibir aqui.")
+        try {
+            const response = await fetch(`http://localhost:8080/api/users/deleteAccount?email=${userInfo.email}&password=${userInfo.password}`, {
+                method: 'DELETE',
+            });
+
+            if (response.ok) {
+                console.log("Excluído com sucesso");
+                history.push('/');  // Substituindo navigate por history.push
+            } else {
+                console.log("nada a exibir aqui.");
+            }
+        } catch (error) {
+            console.error('Erro ao excluir a conta:', error);
         }
-      } catch (error) {
-        console.error('Erro ao excluir a conta:', error);
-      }
     };
   
   
@@ -191,7 +186,7 @@ const Dashboard = () => {
                         <motion.div 
                             className="card text-bg-primary mb-3 pe-auto" 
                             style={{ width: '18rem' }} 
-                            onClick={() => navigate('/events')}
+                            onClick={() => history.push('/events')}  // Substituindo navigate por history.push
                             custom={0}
                             initial="hidden"
                             animate="visible"
@@ -206,7 +201,7 @@ const Dashboard = () => {
                         <motion.div 
                             className="card text-bg-danger mb-3 pe-auto" 
                             style={{ width: '18rem' }} 
-                            onClick={() => navigate('/myaccount')}
+                            onClick={() => history.push('/myaccount')}  // Substituindo navigate por history.push
                             custom={1}
                             initial="hidden"
                             animate="visible"
@@ -222,7 +217,7 @@ const Dashboard = () => {
                             <motion.div 
                                 className="card text-bg-light mb-3 border-3 pe-auto" 
                                 style={{ width: '18rem' }} 
-                                onClick={() => navigate('/crudevent')}
+                                onClick={() => history.push('/crudevent')}  // Substituindo navigate por history.push
                                 custom={2}
                                 initial="hidden"
                                 animate="visible"
@@ -239,7 +234,7 @@ const Dashboard = () => {
                             <motion.div 
                                 className="card text-bg-dark mb-3 pe-auto" 
                                 style={{ width: '18rem' }} 
-                                onClick={() => navigate('/myaccountdiretor')}
+                                onClick={() => history.push('/myaccountdiretor')}  // Substituindo navigate por history.push
                                 custom={3}
                                 initial="hidden"
                                 animate="visible"

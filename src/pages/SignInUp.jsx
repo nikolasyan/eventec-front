@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import LogoImg from '../static/Logo.svg';
-import { useNavigate } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';  // Substituímos useNavigate por useHistory
 import SignUpAluno from '../components/SignUpAluno';
 import SignUpProfessor from '../components/SignUpProfessor';
 import SignUpBasicInfo from '../components/SignUpBasicInfo';
 import SignUpDiretor from '../components/SignUpDiretor';
-// import SignUpAddress from '../components/SignUpAddress';
 
 const SignInUp = () => {
-  const navigate = useNavigate();
+  const history = useHistory();  // Substituímos navigate por history
   const [action, setAction] = useState('Cadastrar');
   const [userName, setUserName] = useState('');
   const [cpf, setCpf] = useState('');
@@ -34,31 +33,6 @@ const SignInUp = () => {
   const [registrationStatus, setRegistrationStatus] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  function refreshPage() {
-    localStorage.clear();
-    window.location.reload(false);
-  }
-
-  const handleZipCodeChange = async (cepValue) => {
-    setZipcode(cepValue);
-
-    if (cepValue.length === 8) {
-      try {
-        const response = await axios.get(`http://localhost:8080/api/endereco/${cepValue}`);
-        const enderecoData = response.data;
-
-        if (enderecoData) {
-          setState(enderecoData.state || '');
-          setCity(enderecoData.city || '');
-          setNeighborhood(enderecoData.neighborhood || '');
-          setStreet(enderecoData.street || '');
-        }
-      } catch (error) {
-        console.error("Erro ao buscar endereço pelo CEP:", error);
-      }
-    }
-  };
 
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
@@ -115,7 +89,7 @@ const SignInUp = () => {
         localStorage.setItem('cpf', cpf);
         const accountDetailsResponse = await axios.get(`http://localhost:8080/api/users/myAccount?email=${email}&password=${password}`);
         console.log('Account Details:', accountDetailsResponse.data);
-        navigate('/dashboard');
+        history.push('/dashboard');  // Substituímos navigate por history.push
       } catch (error) {
         console.error('There was an error logging in!', error);
         setErrorMessage(error.response?.data || 'Login ou senha incorretos.');
@@ -191,17 +165,6 @@ const SignInUp = () => {
                 onChange={handleUserTypeChange}
               />
               <label className="btn btn-outline-primary" htmlFor="professor">Professor</label>
-
-              {/* <input
-                className="btn-check"
-                type="radio"
-                id="diretor"
-                autoComplete="off"
-                value="diretor"
-                checked={userType === 'diretor'}
-                onChange={handleUserTypeChange}
-              />
-              <label className="btn btn-outline-primary" htmlFor="diretor">Diretor</label> */}
             </div>
           )}
 
@@ -243,20 +206,6 @@ const SignInUp = () => {
                   password={password}
                   setPassword={setPassword}
                 />
-
-                {/* <SignUpAddress
-                  zipCode={zipCode}
-                  setZipcode={setZipcode}
-                  state={state}
-                  setState={setState}
-                  city={city}
-                  setCity={setCity}
-                  neighborhood={neighborhood}
-                  setNeighborhood={setNeighborhood}
-                  street={street}
-                  setStreet={setStreet}
-                  handleZipCodeChange={handleZipCodeChange}
-                /> */}
 
                 {userType === 'aluno' && (
                   <SignUpAluno

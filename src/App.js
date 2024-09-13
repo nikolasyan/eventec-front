@@ -1,11 +1,14 @@
+import { IonApp } from '@ionic/react';
+import { IonReactRouter } from '@ionic/react-router';
 import AppRoutes from './Routes';
-
 
 function App() {
   return (
-    <div className="App">
-      <AppRoutes></AppRoutes> 
-    </div>
+    <IonApp>
+      <IonReactRouter>
+        <AppRoutes />
+      </IonReactRouter>
+    </IonApp>
   );
 }
 
