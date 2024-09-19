@@ -15,7 +15,7 @@ const DiretorMyAccount = () => {
     const [approvedEventsData, setApprovedEventsData] = useState([]);
 
     useEffect(() => {
-        axios.get('http://localhost:8080/pendingEvents', {
+        axios.get('http://10.0.2.2:8080/pendingEvents', {
             params: {
                 email: userEmail,
                 password: userPassword
@@ -29,7 +29,7 @@ const DiretorMyAccount = () => {
             });
 
 
-        axios.get('http://localhost:8080/approvedEvents')
+        axios.get('http://10.0.2.2:8080/approvedEvents')
             .then(response => {
                 setApprovedEventsData(response.data);
             })
@@ -39,7 +39,7 @@ const DiretorMyAccount = () => {
     }, []);
 
     const handleApprove = (eventId) => {
-        axios.put(`http://localhost:8080/approveEvent/${eventId}?email=${userEmail}&password=${userPassword}`)
+        axios.put(`http://10.0.2.2:8080/approveEvent/${eventId}?email=${userEmail}&password=${userPassword}`)
             .then(response => {
                 setPendingEventsData(prevEvents => prevEvents.filter(event => event.id !== eventId));
             })

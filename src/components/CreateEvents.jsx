@@ -87,7 +87,7 @@ const CreateEvents = () => {
     formData.append('locationEvent', locationEvent);
 
     try {
-      const response = await axios.post('http://localhost:8080/event', formData, {
+      const response = await axios.post('http://10.0.2.2:8080/event', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }

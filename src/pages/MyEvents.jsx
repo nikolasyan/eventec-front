@@ -28,7 +28,7 @@ const MyEvents = () => {
                     return;
                 }
 
-                const response = await axios.get(`http://localhost:8080/subscriptions/user/${userid}`);
+                const response = await axios.get(`http://10.0.2.2:8080/subscriptions/user/${userid}`);
 
                 setMyEvents(response.data);
                 console.log(response.data);

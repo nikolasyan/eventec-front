@@ -39,7 +39,7 @@ const MyAccount = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/api/users/changePassword?email=${userInfo.email}&currentPassword=${currentPassword}&newPassword=${newPassword}`, {
+      const response = await fetch(`http://10.0.2.2:8080/api/users/changePassword?email=${userInfo.email}&currentPassword=${currentPassword}&newPassword=${newPassword}`, {
         method: 'POST',
       });
 
@@ -62,7 +62,7 @@ const MyAccount = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/users/deleteAccount?email=${userInfo.email}&password=${userInfo.password}`, {
+      const response = await fetch(`http://10.0.2.2:8080/api/users/deleteAccount?email=${userInfo.email}&password=${userInfo.password}`, {
         method: 'DELETE',
       });
 
@@ -86,7 +86,7 @@ const MyAccount = () => {
 
     const consult = async () => {
       try {
-        const url = `http://localhost:8080/api/users/myAccount?email=${email}&password=${password}`;
+        const url = `http://10.0.2.2:8080/api/users/myAccount?email=${email}&password=${password}`;
         const answer = await fetch(url);
         if (!answer.ok) {
           throw new Error();
@@ -104,7 +104,7 @@ const MyAccount = () => {
   useEffect(() => {
     const fetchMostSubscribedEvents = async () => {
       try {
-        const response = await fetch('http://localhost:8080/subscriptions/most-subscribed-events');
+        const response = await fetch('http://10.0.2.2:8080/subscriptions/most-subscribed-events');
         if (response.ok) {
           const data = await response.json();
           const eventsArray = Object.keys(data).map(key => ({ title: key, description:key, count: data[key] }));

@@ -67,12 +67,12 @@ const MyCertifications = () => {
         const fetchCertificates = async () => {
             try {
                 // Busca os certificados dos alunos
-                const response = await axios.get(`http://localhost:8080/api/certifications/user/${userid}`);
+                const response = await axios.get(`http://10.0.2.2:8080/api/certifications/user/${userid}`);
                 if (response.status === 200) {
                     setCertificates(response.data);
     
                     // Busca os certificados dos professores
-                    const professorResponse = await axios.get(`http://localhost:8080/api/certifications/professor/${userid}`);
+                    const professorResponse = await axios.get(`http://10.0.2.2:8080/api/certifications/professor/${userid}`);
                     if (professorResponse.status === 200) {
                         setProfessorCertificates(professorResponse.data);
                     }

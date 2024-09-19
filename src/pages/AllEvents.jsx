@@ -88,7 +88,7 @@ const AllEvents = () => {
   useEffect(() => {
     const fetchAllEvents = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/approvedEvents/${userType}`);
+        const response = await axios.get(`http://10.0.2.2:8080/approvedEvents/${userType}`);
         setAllEvents(response.data);
         setFilteredEvents(response.data);
       } catch (error) {
@@ -108,7 +108,7 @@ const AllEvents = () => {
 
   const handleSubscribeToEvent = async (eventId, title, dateEvent, address) => {
     try {
-      const response = await axios.post('http://localhost:8080/subscriptions', null, {
+      const response = await axios.post('http://10.0.2.2:8080/subscriptions', null, {
         params: {
           userid,
           userName,

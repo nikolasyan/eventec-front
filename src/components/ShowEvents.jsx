@@ -14,7 +14,7 @@ const ShowEvents = () => {
         const userPassword = localStorage.getItem('userPassword');
         
 
-        axios.get(`http://localhost:8080/myEvents?email=${userEmail}&password=${userPassword}`)
+        axios.get(`http://10.0.2.2:8080/myEvents?email=${userEmail}&password=${userPassword}`)
             .then(response => {
                 setEvents(response.data);
             })
@@ -24,7 +24,7 @@ const ShowEvents = () => {
     }, []);
 
     const deleteEvent = (eventId) => {
-        axios.delete(`http://localhost:8080/event/${eventId}`)
+        axios.delete(`http://10.0.2.2:8080/event/${eventId}`)
             .then(response => {
                 setEvents(events.filter(event => event.id !== eventId));
             })
@@ -41,7 +41,7 @@ const ShowEvents = () => {
     };
 
     const fetchEventUsers = (eventId) => {
-        axios.get(`http://localhost:8080/eventUsers/${eventId}`)
+        axios.get(`http://10.0.2.2:8080/eventUsers/${eventId}`)
             .then(response => {
                 setCurrentEventId(eventId);
                 setEventUsers(response.data);
@@ -65,7 +65,7 @@ const ShowEvents = () => {
             return;
         }
     
-        axios.post(`http://localhost:8080/api/certifications/generate/${eventId}?professorName=${professorName}&userid=${userid}`, selectedUsers)
+        axios.post(`http://10.0.2.2:8080/api/certifications/generate/${eventId}?professorName=${professorName}&userid=${userid}`, selectedUsers)
         .then(response => {
             alert("Certificados gerados com sucesso!");
         })
@@ -75,7 +75,7 @@ const ShowEvents = () => {
     }
 
     const saveEditedEvent = () => {
-        axios.put(`http://localhost:8080/eventEdit/${editingEventId}`, { dateEvent: editedEventDate, dateEndEvent: editedEndEventDate })
+        axios.put(`http://10.0.2.2:8080/eventEdit/${editingEventId}`, { dateEvent: editedEventDate, dateEndEvent: editedEndEventDate })
             .then(response => {
                 setEvents(events.map(event => {
                     if (event.id === editingEventId) {
