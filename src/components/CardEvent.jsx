@@ -1,37 +1,51 @@
-import React from 'react';
+import React, { useState } from 'react';
+import EventDetailsModal from './EventDetailsModal';
 
-const CardEvent = ({ eventTitle, eventDescription, eventCategory, cargaHora, eventAddress, eventDate, distance, onSubscribe, dateEndEvent, vagas, bannerImage }) => {
+const CardEvent = ({ eventTitle, eventDescription, eventCategory, cargaHora, eventAddress, eventDate, distance, dateEndEvent, vagas, bannerImage, onSubscribe }) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const handleOpenModal = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   return (
-    <><div className="card text-start" style={{ maxWidth: "400px" }}>
-      <img src={`data:image/jpeg;base64,${bannerImage}`} className="card-img-top" alt="banner" style={{ maxHeight: "200px", width: "100%" }} />
-      <div className="card-body cardEvent">
-        <h4 className="card-title">{eventTitle}</h4>
-        <strong className="card-text">{eventDescription}</strong>
-        <div className="d-flex">
-          <strong>Categoria: </strong>
-          <span>{eventCategory}</span>
+    <>
+      <div className="card text-start w-100 h-100">
+        <img src={`data:image/jpeg;base64,${bannerImage}`} className="card-img-top h-50" alt="banner" style={{ width: "100%" }} />
+        <div className="card-body cardEvent flex-col justify-content-end">
+          <h4 className="card-title h-100">{eventTitle}</h4>
+          <div className="d-flex">
+            <strong>Categoria: </strong>
+            <span>{eventCategory}</span>
+            <span className='d-none'><strong>Distância: </strong>{typeof distance === 'number' ? distance.toFixed(2) : 'N/A'} km</span>
+          </div>
+          <button type="button" className="btn btn-primary mt-3" onClick={handleOpenModal}>
+            Ver mais
+          </button>
         </div>
-        <div className="d-flex">
-          <strong>Carga horária:</strong>
-          <span> {cargaHora} horas</span>
-        </div>
-        <span><strong>Localização: </strong></span>
-        <span>{eventAddress}</span>
-        <span><strong>Distância: </strong>{typeof distance === 'number' ? distance.toFixed(2) : 'N/A'} km</span>
-        <span><strong>Inicio do evento:</strong> <input type="datetime-local" value={eventDate} disabled /></span>
-        <span><strong>Fim do evento:</strong> <input type="datetime-local" value={dateEndEvent} disabled /></span>
-        <span><strong>Modalidade:</strong> Remoto</span>
-        <span><strong>Número de vagas:</strong> {vagas}</span>
-        <br />
-        <button data-bs-toggle="modal" data-bs-target="#modalInscricao" className="btn btn-primary" onClick={(e) => {
-          e.preventDefault(); // Evitar a ação padrão do link
-          onSubscribe(); // Chamar a função passada como prop
-        } }>
-          Inscrever-se
-        </button>
       </div>
-    </div></>
+
+      {/* Modal para o evento atual */}
+      {showModal && (
+        <EventDetailsModal
+          eventTitle={eventTitle}
+          eventDescription={eventDescription}
+          eventCategory={eventCategory}
+          cargaHora={cargaHora}
+          eventAddress={eventAddress}
+          eventDate={eventDate}
+          dateEndEvent={dateEndEvent}
+          distance={distance}
+          vagas={vagas}
+          onSubscribe={onSubscribe}
+          onClose={handleCloseModal}
+        />
+      )}
+    </>
   );
 };
 

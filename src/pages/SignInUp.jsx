@@ -45,7 +45,7 @@ const SignInUp = () => {
 
     if (cepValue.length === 8) {
       try {
-        const response = await axios.get(`http://10.0.2.2:8080/api/endereco/${cepValue}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/endereco/${cepValue}`);
         const enderecoData = response.data;
 
         if (enderecoData) {
@@ -70,7 +70,7 @@ const SignInUp = () => {
 
     if (action === 'Cadastrar') {
       try {
-        const response = await axios.post('http://10.0.2.2:8080/api/users/create', {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/create`, {
           userid,
           userName,
           email,
@@ -102,7 +102,7 @@ const SignInUp = () => {
       }
     } else if (action === 'Login') {
       try {
-        const response = await axios.post('http://10.0.2.2:8080/login', {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
           userid,
           email,
           password,
@@ -113,7 +113,7 @@ const SignInUp = () => {
         localStorage.setItem('userEmail', email);
         localStorage.setItem('userPassword', password);
         localStorage.setItem('cpf', cpf);
-        const accountDetailsResponse = await axios.get(`http://10.0.2.2:8080/api/users/myAccount?email=${email}&password=${password}`);
+        const accountDetailsResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/myAccount?email=${email}&password=${password}`);
         console.log('Account Details:', accountDetailsResponse.data);
         navigate('/dashboard');
       } catch (error) {
