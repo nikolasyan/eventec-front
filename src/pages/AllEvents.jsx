@@ -24,7 +24,6 @@ const AllEvents = () => {
   const [filteredEvents, setFilteredEvents] = useState([]);
   const [userid] = useState(localStorage.getItem('userid'));
   const [userName] = useState(localStorage.getItem('userName'));
-  const [userEmail] = useState(localStorage.getItem('userEmail'));
   const [userType] = useState(localStorage.getItem('userType'));
   const [modalMessage, setModalMessage] = useState('');
 

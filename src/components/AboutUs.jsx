@@ -1,5 +1,5 @@
 import React from 'react';
-import { Collection, GearFill, Table, Speedometer, CashCoin, Coin, PatchCheck, EmojiSmile } from 'react-bootstrap-icons';
+import { Collection, Coin, PatchCheck, EmojiSmile } from 'react-bootstrap-icons';
 import { motion } from 'framer-motion';
 
 const featureVariants = {
@@ -62,10 +62,6 @@ const AboutUs = () => {
           transition={{ duration: 1.2 }}
         >
           <h2 className="fw-bold text-body-emphasis"> Descubra os Benefícios do Eventec</h2>
-          {/* <p className="text-body-secondary">
-            Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.
-          </p>
-          <a href="#" className="btn btn-primary btn-lg">Primary button</a> */}
         </motion.div>
 
         <div className="col">

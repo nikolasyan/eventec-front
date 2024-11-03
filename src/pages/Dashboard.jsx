@@ -27,73 +27,16 @@ const Dashboard = () => {
 
     const navigate = useNavigate();
     const [userInfo, setInfo] = useState({});
-    const [erro, setErro] = useState(null);
-    const [currentPassword, setCurrentPassword] = useState('');
-    const [newPassword, setNewPassword] = useState('');
-    const [changePasswordError, setChangePasswordError] = useState(null);
-    const [showPasswordFields, setShowPasswordFields] = useState(false);
     const [mostSubscribedEvents, setMostSubscribedEvents] = useState([]);
   
   
-    const [userid] = useState('');
     localStorage.setItem('userid', userInfo.userid);
     localStorage.setItem('userName', userInfo.userName)
     localStorage.setItem('userType', userInfo.userType)
     localStorage.setItem('emailValidationType', userInfo.emailValidationType)
   
   
-    const handleChangePassword = async () => {
-      const currentPasswordInput = document.getElementById('currentPassword');
-      const newPasswordInput = document.getElementById('newPassword');
-      const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
-  
-      const currentPassword = currentPasswordInput.value;
-      const newPassword = newPasswordInput.value;
-      const confirmNewPassword = confirmNewPasswordInput.value;
-  
-      if (newPassword !== confirmNewPassword) {
-        setChangePasswordError('As senhas não coincidem');
-        return;
-      }
-  
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/changePassword?email=${userInfo.email}&currentPassword=${currentPassword}&newPassword=${newPassword}`, {
-          method: 'POST',
-        });
-  
-        if (response.ok) {
-          setCurrentPassword('');
-          setNewPassword('');
-          confirmNewPasswordInput.value = '';
-          setChangePasswordError(null);
-          console.log("Senha trocada com sucesso! Favor fazer login novamente");
-          window.location.href = '/signinup';
-        } else {
-          setChangePasswordError('Senha atual incorreta');
-        }
-      } catch (error) {
-        console.error('Erro ao trocar a senha:', error);
-        setChangePasswordError('Erro ao trocar a senha');
-      }
-    };
-  
-  
-    const handleDeleteAccount = async () => {
-      try {
-        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/deleteAccount?email=${userInfo.email}&password=${userInfo.password}`, {
-          method: 'DELETE',
-        });
-  
-        if (response.ok) {
-          console.log("Excluído com sucesso")
-          navigate('/');
-        } else {
-          console.log("nada a exibir aqui.")
-        }
-      } catch (error) {
-        console.error('Erro ao excluir a conta:', error);
-      }
-    };
+
   
   
   
@@ -101,6 +44,7 @@ const Dashboard = () => {
       const userid = localStorage.getItem('userid')
       const email = localStorage.getItem('userEmail');
       const password = localStorage.getItem('userPassword');
+      console.log(userid);
   
       const consult = async () => {
         try {
