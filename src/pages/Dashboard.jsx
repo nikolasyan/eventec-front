@@ -27,6 +27,7 @@ const Dashboard = () => {
 
     const navigate = useNavigate();
     const [userInfo, setInfo] = useState({});
+    const [erro, setErro] = useState(null);
     const [mostSubscribedEvents, setMostSubscribedEvents] = useState([]);
   
   
@@ -45,6 +46,7 @@ const Dashboard = () => {
       const email = localStorage.getItem('userEmail');
       const password = localStorage.getItem('userPassword');
       console.log(userid);
+      console.log(erro);
   
       const consult = async () => {
         try {
