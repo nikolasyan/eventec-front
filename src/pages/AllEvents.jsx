@@ -88,7 +88,7 @@ const AllEvents = () => {
   useEffect(() => {
     const fetchAllEvents = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/approvedEvents/${userType}`);
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/approvedEvents/${userType}`);
         setAllEvents(response.data);
         setFilteredEvents(response.data);
       } catch (error) {
@@ -108,7 +108,7 @@ const AllEvents = () => {
 
   const handleSubscribeToEvent = async (eventId, title, dateEvent, address) => {
     try {
-      const response = await axios.post('http://localhost:8080/subscriptions', null, {
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/subscriptions`, null, {
         params: {
           userid,
           userName,
@@ -160,7 +160,7 @@ const AllEvents = () => {
           </div>
           <br /><br /><br />
           <div className='container'>
-            <div className="row">
+            <div className="row justify-content-center">
               <div className="col-sm-12 col-md-6 mb-5">
                 <h4>Eventos próximos a mim</h4>
                 <p className="text-danger">Para maior precisão, prefira uma rede móvel, e não utilize VPNs.</p>
@@ -184,13 +184,14 @@ const AllEvents = () => {
                   </div>
                 </div>
               </div>
-              <div className="d-flex flex-wrap justify-content-center gap-4">
+              <div className="row">
                 {filteredEvents.map((event, index) => (
                   <motion.div
                     key={event.id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: index * 0.2 }}
+                    className='col-12 col-sm-6 col-md-4 mb-3'
                   >
                     <CardEvent 
                       eventTitle={event.title}

@@ -36,7 +36,7 @@ const MyAccount = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:8080/api/users/changePassword?email=${userInfo.email}&currentPassword=${currentPassword}&newPassword=${newPassword}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/changePassword?email=${userInfo.email}&currentPassword=${currentPassword}&newPassword=${newPassword}`, {
         method: 'POST',
       });
 
@@ -58,7 +58,7 @@ const MyAccount = () => {
 
   const handleDeleteAccount = async () => {
     try {
-      const response = await fetch(`http://localhost:8080/api/users/deleteAccount?email=${userInfo.email}&password=${userInfo.password}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/deleteAccount?email=${userInfo.email}&password=${userInfo.password}`, {
         method: 'DELETE',
       });
 
@@ -80,7 +80,7 @@ const MyAccount = () => {
 
     const consult = async () => {
       try {
-        const url = `http://localhost:8080/api/users/myAccount?email=${email}&password=${password}`;
+        const url = `${process.env.REACT_APP_API_URL}/api/users/myAccount?email=${email}&password=${password}`;
         const answer = await fetch(url);
         if (!answer.ok) {
           throw new Error();
@@ -98,7 +98,7 @@ const MyAccount = () => {
   useEffect(() => {
     const fetchMostSubscribedEvents = async () => {
       try {
-        const response = await fetch('http://localhost:8080/subscriptions/most-subscribed-events');
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/subscriptions/most-subscribed-events`);
         if (response.ok) {
           const data = await response.json();
           const eventsArray = Object.keys(data).map(key => ({ title: key, description: key, count: data[key] }));
@@ -117,7 +117,7 @@ const MyAccount = () => {
   }, []);
 
   return (
-    <><LoggedNavbar /><>
+    <><LoggedNavbar />
       <div className="container-bg">
         <div className="container" style={{ minHeight: "80vh" }}>
           <br /><br />
@@ -271,14 +271,48 @@ const MyAccount = () => {
                   <label className='form-label'>Senha:</label>
                 </div>
 
-              </form>
+
+                </form>
+              </div>
+
+              {/* <div className='col-lg-12 col-xl-4 myAccountBox'>
+
+                <div className='d-flex justify-content-between'>
+                  <h5>Seu endereço: </h5>
+                  <h5></h5>
+                </div>
+                <form className='formContainer'>
+                  <div className="form-floating mb-3">
+                    <input className='form-control' type="text" placeholder='zipCode' value={userInfo?.zipCode || ''} disabled />
+                    <label className='form-label'>CEP:</label>
+                  </div>
+
+                  <div className="form-floating mb-3">
+                    <input className='form-control' type="text" value={userInfo?.street || ''} placeholder='street' disabled />
+                    <label className='form-label'>Endereço:</label>
+                  </div>
+
+                  <div className="form-floating mb-3">
+                    <input className='form-control' type="text" placeholder='Estado' value={userInfo?.state || ''} disabled />
+                    <label className='form-label'>Estado:</label>
+                  </div>
+
+                  <div className="form-floating mb-3">
+                    <input className='form-control' type="text" placeholder='Bairro' value={userInfo?.neighborhood || 'N/A'} disabled />
+                    <label className='form-label'>Bairro:</label>
+                  </div>
+
+                  <div className="form-floating mb-3">
+                    <input className='form-control' type="text" value={userInfo?.RA || 'N/A'} placeholder='Cidade' disabled />
+                    <label className='form-label'>Cidade:</label>
+                  </div>
+
+                </form>
+              </div> */}
             </div>
-          </div>
-        </div>
-        <Footer />
-      </div></>
-    </>
-  );
+
+          </div><Footer /></div></>
+      );
 }
 
 export default MyAccount;

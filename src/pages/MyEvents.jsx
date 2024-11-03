@@ -28,7 +28,7 @@ const MyEvents = () => {
                     return;
                 }
 
-                const response = await axios.get(`http://localhost:8080/subscriptions/user/${userid}`);
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/subscriptions/user/${userid}`);
 
                 setMyEvents(response.data);
                 console.log(response.data);

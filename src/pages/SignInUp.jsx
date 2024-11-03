@@ -34,6 +34,31 @@ const SignInUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
+  function refreshPage() {
+    localStorage.clear();
+    window.location.reload(false);
+  }
+
+  const handleZipCodeChange = async (cepValue) => {
+    setZipcode(cepValue);
+
+    if (cepValue.length === 8) {
+      try {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/endereco/${cepValue}`);
+        const enderecoData = response.data;
+
+        if (enderecoData) {
+          setState(enderecoData.state || '');
+          setCity(enderecoData.city || '');
+          setNeighborhood(enderecoData.neighborhood || '');
+          setStreet(enderecoData.street || '');
+        }
+      } catch (error) {
+        console.error("Erro ao buscar endereço pelo CEP:", error);
+      }
+    }
+  };
+
   const handleUserTypeChange = (event) => {
     setUserType(event.target.value);
   };
@@ -44,7 +69,7 @@ const SignInUp = () => {
 
     if (action === 'Cadastrar') {
       try {
-        const response = await axios.post('http://localhost:8080/api/users/create', {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/users/create`, {
           userid,
           userName,
           email,
@@ -76,7 +101,7 @@ const SignInUp = () => {
       }
     } else if (action === 'Login') {
       try {
-        const response = await axios.post('http://localhost:8080/login', {
+        const response = await axios.post(`${process.env.REACT_APP_API_URL}/login`, {
           userid,
           email,
           password,
@@ -87,7 +112,7 @@ const SignInUp = () => {
         localStorage.setItem('userEmail', email);
         localStorage.setItem('userPassword', password);
         localStorage.setItem('cpf', cpf);
-        const accountDetailsResponse = await axios.get(`http://localhost:8080/api/users/myAccount?email=${email}&password=${password}`);
+        const accountDetailsResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/users/myAccount?email=${email}&password=${password}`);
         console.log('Account Details:', accountDetailsResponse.data);
         history.push('/dashboard');  // Substituímos navigate por history.push
       } catch (error) {

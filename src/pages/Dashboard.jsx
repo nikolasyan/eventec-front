@@ -53,7 +53,7 @@ const Dashboard = () => {
       }
   
       try {
-        const response = await fetch(`http://localhost:8080/api/users/changePassword?email=${userInfo.email}&currentPassword=${currentPassword}&newPassword=${newPassword}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/changePassword?email=${userInfo.email}&currentPassword=${currentPassword}&newPassword=${newPassword}`, {
           method: 'POST',
         });
   
@@ -74,20 +74,20 @@ const Dashboard = () => {
     };
 
     const handleDeleteAccount = async () => {
-        try {
-            const response = await fetch(`http://localhost:8080/api/users/deleteAccount?email=${userInfo.email}&password=${userInfo.password}`, {
-                method: 'DELETE',
-            });
-
-            if (response.ok) {
-                console.log("Excluído com sucesso");
-                history.push('/');  // Substituindo navigate por history.push
-            } else {
-                console.log("nada a exibir aqui.");
-            }
-        } catch (error) {
-            console.error('Erro ao excluir a conta:', error);
+      try {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/users/deleteAccount?email=${userInfo.email}&password=${userInfo.password}`, {
+          method: 'DELETE',
+        });
+  
+        if (response.ok) {
+          console.log("Excluído com sucesso")
+          navigate('/');
+        } else {
+          console.log("nada a exibir aqui.")
         }
+      } catch (error) {
+        console.error('Erro ao excluir a conta:', error);
+      }
     };
   
   
@@ -99,7 +99,7 @@ const Dashboard = () => {
   
       const consult = async () => {
         try {
-          const url = `http://localhost:8080/api/users/myAccount?email=${email}&password=${password}`;
+          const url = `${process.env.REACT_APP_API_URL}/api/users/myAccount?email=${email}&password=${password}`;
           const answer = await fetch(url);
           if (!answer.ok) {
             throw new Error();
@@ -117,7 +117,7 @@ const Dashboard = () => {
     useEffect(() => {
       const fetchMostSubscribedEvents = async () => {
         try {
-          const response = await fetch('http://localhost:8080/subscriptions/most-subscribed-events');
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/subscriptions/most-subscribed-events`);
           if (response.ok) {
             const data = await response.json();
             const eventsArray = Object.keys(data).map(key => ({ title: key, description:key, count: data[key] }));

@@ -1,6 +1,5 @@
 .cardEvent{
     display: flex;
-    gap: 10px;
     flex-direction: column;
 
     > input[type="datetime-local"]{
