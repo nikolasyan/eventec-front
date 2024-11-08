@@ -9,6 +9,8 @@ import ProfessorCertificateItem from '../components/ProfessorCertificateItem';
 const MyCertifications = () => {
     const [certificates, setCertificates] = useState([]);
     const [professorCertificates, setProfessorCertificates] = useState([]);
+    const [pdfData, setPdfData] = useState(null); // For PDF modal
+    const [showModal, setShowModal] = useState(false); // For modal visibility
 
     const formatDateTime = (isoDate) => {
         const options = {
@@ -21,15 +23,14 @@ const MyCertifications = () => {
         };
         return new Date(isoDate).toLocaleDateString(undefined, options).replace(',', ' ');
     };
-    // console.log(certificates)
-    const handleDownloadCertificate = (certificate) => {
+
+    const handleGenerateCertificate = (certificate) => {
         const doc = new jsPDF('landscape');
-        // console.log(certificate)
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
         const marginBottom = 10;
         const marginLeft = 20;
-        
+
         const img = new Image();
         img.src = logo;
         img.onload = () => {
@@ -56,9 +57,10 @@ const MyCertifications = () => {
 
             doc.text(text, textXPosition, 50);
 
-            doc.save(`Certificado_${certificate.eventTitle}.pdf`);
+            const pdfUrl = doc.output('datauristring'); // Generate PDF as a data URL
+            setPdfData(pdfUrl); // Set the PDF data to state
+            setShowModal(true); // Show the modal
         };
-        console.log(certificate)
     };
 
     useEffect(() => {
@@ -98,7 +100,7 @@ const MyCertifications = () => {
                                         <h5 className="card-title">{certificate.eventTitle}</h5>
                                         <h6 className="card-subtitle mb-2 text-body-secondary">{certificate.category}</h6>
                                         <p className="card-text">Conclusão: {formatDateTime(certificate.eventDate)}</p>
-                                        <button onClick={() => handleDownloadCertificate(certificate)} className="btn btn-primary mt-auto mx-auto">Pegar certificado</button>
+                                        <button onClick={() => handleGenerateCertificate(certificate)} className="btn btn-primary mt-auto mx-auto">Visualizar certificado</button>
                                     </div>
                                 </div>
                             </div>
@@ -117,6 +119,26 @@ const MyCertifications = () => {
                 </div>
                 <Footer />
             </div>
+
+            {/* Modal to display PDF */}
+            {showModal && (
+                <div className="modal d-block" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <div className="modal-dialog modal-lg">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Certificado</h5>
+                                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                            </div>
+                            <div className="modal-body">
+                                {pdfData && <iframe src={pdfData} width="100%" height="500px" title="Certificado"></iframe>}
+                            </div>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Fechar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
