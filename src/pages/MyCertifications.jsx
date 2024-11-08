@@ -24,19 +24,53 @@ const MyCertifications = () => {
         return new Date(isoDate).toLocaleDateString(undefined, options).replace(',', ' ');
     };
 
-    const handleDownloadCertificate = (certificate) => {
-        window.parent.postMessage({
-            action: 'downloadCertificate',
-            certificate: {
-                userName: certificate.userName,
-                eventTitle: certificate.eventTitle,
-                eventDate: certificate.eventDate,
-                cargaHoraria: certificate.subscription.event.cargaHoraria
-            }
-        }, '*');
-    };
-      
+    const handleDownloadCertificate = async (certificate) => {
+        const doc = new jsPDF('landscape');
+        const pageWidth = doc.internal.pageSize.getWidth();
+        const pageHeight = doc.internal.pageSize.getHeight();
+        
+        // Adicionando o logo
+        const img = new Image();
+        img.src = logo;
+        await new Promise((resolve) => { img.onload = resolve; });
 
+        const imgWidth = 50;
+        const imgHeight = 20;
+        const xPosition = (pageWidth - imgWidth) / 2;
+        const yPosition = pageHeight - imgHeight - 10;
+        doc.addImage(img, 'JPG', xPosition, yPosition, imgWidth, imgHeight);
+
+        // Adicionando o conteúdo do certificado
+        doc.text(`Certificamos para os devidos fins que ${certificate.userName} concluiu com sucesso o evento:`, 20, 50);
+        doc.text(`Evento: ${certificate.eventTitle}`, 20, 60);
+        doc.text(`Conclusão: ${formatDateTime(certificate.eventDate)}`, 20, 70);
+        doc.text(`Carga Horária: ${certificate.subscription.event.cargaHoraria} horas`, 20, 80);
+
+        // Gerar PDF como Blob
+        const pdfBlob = doc.output('blob');
+
+        if (Capacitor.isNativePlatform()) {
+            // Convert Blob to Base64
+            const base64Data = await convertBlobToBase64(pdfBlob);
+
+            // Salvar o PDF no sistema de arquivos do dispositivo
+            await Filesystem.writeFile({
+                path: `Certificado_${certificate.eventTitle}.pdf`,
+                data: base64Data,
+                directory: Directory.Documents
+            });
+
+            alert('Certificado salvo nos documentos do dispositivo');
+        } else {
+            // Download para o navegador (ambiente web)
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(pdfBlob);
+            link.download = `Certificado_${certificate.eventTitle}.pdf`;
+            link.click();
+        }
+    };
+
+    // Função auxiliar para converter Blob em Base64
     const convertBlobToBase64 = (blob) => 
         new Promise((resolve, reject) => {
             const reader = new FileReader();
