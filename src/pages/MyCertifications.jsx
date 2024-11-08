@@ -3,14 +3,14 @@ import LoggedNavbar from './LoggedNavbar';
 import Footer from '../components/Footer';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import logo from '../assets/logocps.jpg'; 
+import { Capacitor } from '@capacitor/core';
+import logo from '../assets/logocps.jpg';
 import ProfessorCertificateItem from '../components/ProfessorCertificateItem';
 
 const MyCertifications = () => {
     const [certificates, setCertificates] = useState([]);
     const [professorCertificates, setProfessorCertificates] = useState([]);
-    const [pdfData, setPdfData] = useState(null); // For PDF modal
-    const [showModal, setShowModal] = useState(false); // For modal visibility
+    const [pdfUrls, setPdfUrls] = useState({});
 
     const formatDateTime = (isoDate) => {
         const options = {
@@ -24,43 +24,40 @@ const MyCertifications = () => {
         return new Date(isoDate).toLocaleDateString(undefined, options).replace(',', ' ');
     };
 
-    const handleGenerateCertificate = (certificate) => {
+    const handleGenerateCertificate = async (certificate) => {
         const doc = new jsPDF('landscape');
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
-        const marginBottom = 10;
-        const marginLeft = 20;
 
+        // Adding logo
         const img = new Image();
         img.src = logo;
-        img.onload = () => {
-            const originalWidth = img.width;
-            const originalHeight = img.height;
+        await new Promise((resolve) => { img.onload = resolve; });
 
-            const maxWidth = 50;
-            const maxHeight = 20;
-            let imgWidth = maxWidth;
-            let imgHeight = (originalHeight / originalWidth) * imgWidth;
+        const imgWidth = 50;
+        const imgHeight = 20;
+        const xPosition = (pageWidth - imgWidth) / 2;
+        const yPosition = pageHeight - imgHeight - 10;
+        doc.addImage(img, 'JPG', xPosition, yPosition, imgWidth, imgHeight);
 
-            if (imgHeight > maxHeight) {
-                imgHeight = maxHeight;
-                imgWidth = (originalWidth / originalHeight) * imgHeight;
-            }
+        // Adding certificate content
+        doc.text(`Certificamos para os devidos fins que ${certificate.userName} concluiu com sucesso o evento:`, 20, 50);
+        doc.text(`Evento: ${certificate.eventTitle}`, 20, 60);
+        doc.text(`Conclusão: ${formatDateTime(certificate.eventDate)}`, 20, 70);
+        doc.text(`Carga Horária: ${certificate.subscription.event.cargaHoraria} horas`, 20, 80);
 
-            const xPosition = (pageWidth - imgWidth) / 2;
-            const yPosition = pageHeight - imgHeight - marginBottom;
+        // Generate PDF as Blob and create a Blob URL
+        const pdfBlob = doc.output('blob');
+        const pdfUrl = URL.createObjectURL(pdfBlob);
 
-            doc.addImage(logo, 'JPG', xPosition, yPosition, imgWidth, imgHeight);
-
-            const text = `Certificamos para os devidos fins que ${certificate.userName} concluiu com sucesso o evento:\n\nEvento: ${certificate.eventTitle}\nConclusão: ${formatDateTime(certificate.eventDate)}\nCarga Horária: ${certificate.subscription.event.cargaHoraria}`;
-            const textXPosition = marginLeft;
-
-            doc.text(text, textXPosition, 50);
-
-            const pdfUrl = doc.output('datauristring'); // Generate PDF as a data URL
-            setPdfData(pdfUrl); // Set the PDF data to state
-            setShowModal(true); // Show the modal
-        };
+        // Copy the URL to the clipboard
+        try {
+            await navigator.clipboard.writeText(pdfUrl);
+            alert('O link do certificado foi copiado para a área de transferência. Cole no navegador para abrir.');
+        } catch (error) {
+            console.error('Erro ao copiar o link:', error);
+            alert('Erro ao copiar o link. Tente novamente.');
+        }
     };
 
     useEffect(() => {
@@ -92,15 +89,20 @@ const MyCertifications = () => {
             <div className="container-bg">
                 <div className="container">
                     <h3 className='text-center mb-5'>Eventos que participei: </h3>
-                    <div className="row justify-content-start">
+                    <div className="d-flex flex-wrap gap-3 justify-content-center">
                         {certificates.map((certificate, index) => (
-                            <div className="col-12 col-lg-4 mb-3" key={index}>
-                                <div className="card h-100">
-                                    <div className="card-body d-flex flex-column justify-content-end">
+                            <div className="" key={index}>
+                                <div className="card">
+                                    <div className="card-body">
                                         <h5 className="card-title">{certificate.eventTitle}</h5>
                                         <h6 className="card-subtitle mb-2 text-body-secondary">{certificate.category}</h6>
                                         <p className="card-text">Conclusão: {formatDateTime(certificate.eventDate)}</p>
-                                        <button onClick={() => handleGenerateCertificate(certificate)} className="btn btn-primary mt-auto mx-auto">Visualizar certificado</button>
+                                        <div className='d-flex flex-column gap-1'>
+                                        <button onClick={() => handleGenerateCertificate(certificate)} className="btn btn-primary mb-2">Gerar certificado</button>
+                                        {pdfUrls[certificate.eventTitle] && (
+                                            <a href={pdfUrls[certificate.eventTitle]} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">Abrir Certificado</a>
+                                        )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -108,9 +110,9 @@ const MyCertifications = () => {
                     </div>
                     <div className="row">
                         <h3 className='text-center mt-5 mb-5'>{professorCertificates.length > 0 ? 'Eventos que apresentei:' : ''}</h3>
-                        <div className="row justify-content-start">
+                        <div className="d-flex flex-wrap gap-3 justify-content-center">
                             {professorCertificates.map((certificate, index) => (
-                                <div className="col-12 col-lg-4 mb-3" key={index}>
+                                <div className="" key={index}>
                                     <ProfessorCertificateItem certificate={certificate} />
                                 </div>
                             ))}
@@ -145,6 +147,6 @@ const MyCertifications = () => {
             )}
         </>
     );
-}
+};
 
 export default MyCertifications;
