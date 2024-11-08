@@ -57,12 +57,12 @@ const ProfessorCertificateItem = ({ certificate }) => {
 
     return (
         <div className="certificate">
-            <div className="card">
-                <div className="card-body">
+            <div className="card h-100">
+                <div className="card-body d-flex flex-column justify-content-end">
                     <h5 className='card-title'>{certificate.eventTitle}</h5>
                     <p>{`Professor: ${certificate.professorName}`}</p>
                     <p>Conclusão: {formatDateTime(certificate.eventDate)}</p>
-                    <button onClick={() => handleDownloadCertificate(certificate)} className="btn btn-primary">Pegar certificado</button>
+                    <button onClick={() => handleDownloadCertificate(certificate)} className="btn btn-primary mt-auto mx-auto">Pegar certificado</button>
                 </div>
             </div>
         </div>

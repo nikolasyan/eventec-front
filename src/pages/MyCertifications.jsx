@@ -66,12 +66,9 @@ const MyCertifications = () => {
     
         const fetchCertificates = async () => {
             try {
-                // Busca os certificados dos alunos
                 const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/certifications/user/${userid}`);
                 if (response.status === 200) {
                     setCertificates(response.data);
-    
-                    // Busca os certificados dos professores
                     const professorResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/certifications/professor/${userid}`);
                     if (professorResponse.status === 200) {
                         setProfessorCertificates(professorResponse.data);
@@ -92,28 +89,26 @@ const MyCertifications = () => {
             <LoggedNavbar />
             <div className="container-bg">
                 <div className="container">
-                        <h3 className='text-center mb-5'>Eventos que participei: </h3>
-                    <div className="d-flex flex-wrap gap-3 justify-content-center">
+                    <h3 className='text-center mb-5'>Eventos que participei: </h3>
+                    <div className="row justify-content-start">
                         {certificates.map((certificate, index) => (
-                            <div className="" key={index}>
-                                <div className="card">
-                                    <div className="card-body">
+                            <div className="col-12 col-lg-4 mb-3" key={index}>
+                                <div className="card h-100">
+                                    <div className="card-body d-flex flex-column justify-content-end">
                                         <h5 className="card-title">{certificate.eventTitle}</h5>
                                         <h6 className="card-subtitle mb-2 text-body-secondary">{certificate.category}</h6>
-                                        <br />
                                         <p className="card-text">Conclusão: {formatDateTime(certificate.eventDate)}</p>
-                                        <button onClick={() => handleDownloadCertificate(certificate)} className="btn btn-primary">Pegar certificado</button>
+                                        <button onClick={() => handleDownloadCertificate(certificate)} className="btn btn-primary mt-auto mx-auto">Pegar certificado</button>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
-                    <br />
                     <div className="row">
-                        <h3 className='text-center mt-5 mb-5'> {professorCertificates.length > 0 ? 'Eventos que apresentei:' : ''}</h3>
-                        <div className="d-flex flex-wrap gap-3 justify-content-center">
+                        <h3 className='text-center mt-5 mb-5'>{professorCertificates.length > 0 ? 'Eventos que apresentei:' : ''}</h3>
+                        <div className="row justify-content-start">
                             {professorCertificates.map((certificate, index) => (
-                                <div className="" key={index}>
+                                <div className="col-12 col-lg-4 mb-3" key={index}>
                                     <ProfessorCertificateItem certificate={certificate} />
                                 </div>
                             ))}
