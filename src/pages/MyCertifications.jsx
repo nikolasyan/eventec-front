@@ -130,7 +130,11 @@ const MyCertifications = () => {
                                 <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
                             </div>
                             <div className="modal-body">
-                                {pdfData && <iframe src={pdfData} width="100%" height="500px" title="Certificado"></iframe>}
+                            {pdfData && (
+    <object data={pdfData} type="application/pdf" width="100%" height="500px">
+        <p>Seu navegador não suporta exibição de PDFs. <a href={pdfData}>Baixar PDF</a></p>
+    </object>
+)}
                             </div>
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>Fechar</button>
