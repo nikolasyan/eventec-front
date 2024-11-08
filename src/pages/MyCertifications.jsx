@@ -50,11 +50,14 @@ const MyCertifications = () => {
         const pdfBlob = doc.output('blob');
         const pdfUrl = URL.createObjectURL(pdfBlob);
 
-        // Update state with the Blob URL
-        setPdfUrls((prevUrls) => ({
-            ...prevUrls,
-            [certificate.eventTitle]: pdfUrl,
-        }));
+        // Copy the URL to the clipboard
+        try {
+            await navigator.clipboard.writeText(pdfUrl);
+            alert('O link do certificado foi copiado para a área de transferência. Cole no navegador para abrir.');
+        } catch (error) {
+            console.error('Erro ao copiar o link:', error);
+            alert('Erro ao copiar o link. Tente novamente.');
+        }
     };
 
     useEffect(() => {
@@ -94,10 +97,12 @@ const MyCertifications = () => {
                                         <h5 className="card-title">{certificate.eventTitle}</h5>
                                         <h6 className="card-subtitle mb-2 text-body-secondary">{certificate.category}</h6>
                                         <p className="card-text">Conclusão: {formatDateTime(certificate.eventDate)}</p>
+                                        <div className='d-flex flex-column gap-1'>
                                         <button onClick={() => handleGenerateCertificate(certificate)} className="btn btn-primary mb-2">Gerar certificado</button>
                                         {pdfUrls[certificate.eventTitle] && (
                                             <a href={pdfUrls[certificate.eventTitle]} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">Abrir Certificado</a>
                                         )}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
