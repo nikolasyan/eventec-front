@@ -3,7 +3,6 @@ import LoggedNavbar from './LoggedNavbar';
 import Footer from '../components/Footer';
 import axios from 'axios';
 import jsPDF from 'jspdf';
-import { Filesystem, Directory } from '@capacitor/filesystem';
 import { Capacitor } from '@capacitor/core';
 import logo from '../assets/logocps.jpg';
 import ProfessorCertificateItem from '../components/ProfessorCertificateItem';
@@ -11,6 +10,7 @@ import ProfessorCertificateItem from '../components/ProfessorCertificateItem';
 const MyCertifications = () => {
     const [certificates, setCertificates] = useState([]);
     const [professorCertificates, setProfessorCertificates] = useState([]);
+    const [pdfUrls, setPdfUrls] = useState({});
 
     const formatDateTime = (isoDate) => {
         const options = {
@@ -24,12 +24,12 @@ const MyCertifications = () => {
         return new Date(isoDate).toLocaleDateString(undefined, options).replace(',', ' ');
     };
 
-    const handleDownloadCertificate = async (certificate) => {
+    const handleGenerateCertificate = async (certificate) => {
         const doc = new jsPDF('landscape');
         const pageWidth = doc.internal.pageSize.getWidth();
         const pageHeight = doc.internal.pageSize.getHeight();
-        
-        // Adicionando o logo
+
+        // Adding logo
         const img = new Image();
         img.src = logo;
         await new Promise((resolve) => { img.onload = resolve; });
@@ -40,44 +40,22 @@ const MyCertifications = () => {
         const yPosition = pageHeight - imgHeight - 10;
         doc.addImage(img, 'JPG', xPosition, yPosition, imgWidth, imgHeight);
 
-        // Adicionando o conteúdo do certificado
+        // Adding certificate content
         doc.text(`Certificamos para os devidos fins que ${certificate.userName} concluiu com sucesso o evento:`, 20, 50);
         doc.text(`Evento: ${certificate.eventTitle}`, 20, 60);
         doc.text(`Conclusão: ${formatDateTime(certificate.eventDate)}`, 20, 70);
         doc.text(`Carga Horária: ${certificate.subscription.event.cargaHoraria} horas`, 20, 80);
 
-        // Gerar PDF como Blob
+        // Generate PDF as Blob and create a Blob URL
         const pdfBlob = doc.output('blob');
+        const pdfUrl = URL.createObjectURL(pdfBlob);
 
-        if (Capacitor.isNativePlatform()) {
-            // Convert Blob to Base64
-            const base64Data = await convertBlobToBase64(pdfBlob);
-
-            // Salvar o PDF no sistema de arquivos do dispositivo
-            await Filesystem.writeFile({
-                path: `Certificado_${certificate.eventTitle}.pdf`,
-                data: base64Data,
-                directory: Directory.Documents
-            });
-
-            alert('Certificado salvo nos documentos do dispositivo');
-        } else {
-            // Download para o navegador (ambiente web)
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(pdfBlob);
-            link.download = `Certificado_${certificate.eventTitle}.pdf`;
-            link.click();
-        }
+        // Update state with the Blob URL
+        setPdfUrls((prevUrls) => ({
+            ...prevUrls,
+            [certificate.eventTitle]: pdfUrl,
+        }));
     };
-
-    // Função auxiliar para converter Blob em Base64
-    const convertBlobToBase64 = (blob) => 
-        new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result.split(',')[1]);
-            reader.onerror = reject;
-            reader.readAsDataURL(blob);
-        });
 
     useEffect(() => {
         const userid = localStorage.getItem('userid');
@@ -116,7 +94,10 @@ const MyCertifications = () => {
                                         <h5 className="card-title">{certificate.eventTitle}</h5>
                                         <h6 className="card-subtitle mb-2 text-body-secondary">{certificate.category}</h6>
                                         <p className="card-text">Conclusão: {formatDateTime(certificate.eventDate)}</p>
-                                        <button onClick={() => handleDownloadCertificate(certificate)} className="btn btn-primary">Pegar certificado</button>
+                                        <button onClick={() => handleGenerateCertificate(certificate)} className="btn btn-primary mb-2">Gerar certificado</button>
+                                        {pdfUrls[certificate.eventTitle] && (
+                                            <a href={pdfUrls[certificate.eventTitle]} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">Abrir Certificado</a>
+                                        )}
                                     </div>
                                 </div>
                             </div>
