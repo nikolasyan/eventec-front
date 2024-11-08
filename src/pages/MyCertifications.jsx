@@ -46,27 +46,22 @@ const MyCertifications = () => {
         doc.text(`Conclusão: ${formatDateTime(certificate.eventDate)}`, 20, 70);
         doc.text(`Carga Horária: ${certificate.subscription.event.cargaHoraria} horas`, 20, 80);
 
-        // Gerar PDF como Blob
+        // Generate PDF as Blob
         const pdfBlob = doc.output('blob');
-
+    
         if (Capacitor.isNativePlatform()) {
-            // Convert Blob to Base64
+            // Convert Blob to Base64 and save on native platform
             const base64Data = await convertBlobToBase64(pdfBlob);
-
-            // Salvar o PDF no sistema de arquivos do dispositivo
             await Filesystem.writeFile({
                 path: `Certificado_${certificate.eventTitle}.pdf`,
                 data: base64Data,
                 directory: Directory.Documents
             });
-
             alert('Certificado salvo nos documentos do dispositivo');
         } else {
-            // Download para o navegador (ambiente web)
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(pdfBlob);
-            link.download = `Certificado_${certificate.eventTitle}.pdf`;
-            link.click();
+            // Open PDF in a new tab for web environment within iframe
+            const url = URL.createObjectURL(pdfBlob);
+            window.open(url, '_blank'); // Opens in a new tab, allowing user to download
         }
     };
 
